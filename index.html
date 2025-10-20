@@ -13,14 +13,14 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #e8e8e8 0%, #f5f5f5 100%);
+            font-family: 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: #1a1f2e;
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
         }
 
-        /* Abstract curved lines background */
+        /* Background image */
         body::before {
             content: '';
             position: fixed;
@@ -28,11 +28,10 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: 
-                radial-gradient(ellipse at 20% 30%, transparent 40%, #d0d0d0 41%, transparent 42%),
-                radial-gradient(ellipse at 80% 70%, transparent 45%, #c5c5c5 46%, transparent 47%),
-                radial-gradient(ellipse at 50% 50%, transparent 50%, #d5d5d5 51%, transparent 52%);
-            opacity: 0.3;
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxyYWRpYWxHcmFkaWVudCBpZD0iZzEiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNmZjUzMzMiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMxYTFmMmUiLz48L3JhZGlhbEdyYWRpZW50PjxyYWRpYWxHcmFkaWVudCBpZD0iZzIiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNmZjhkMzMiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMxYTFmMmUiLz48L3JhZGlhbEdyYWRpZW50PjxyYWRpYWxHcmFkaWVudCBpZD0iZzMiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMzMzc3ODgiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMxYTFmMmUiLz48L3JhZGlhbEdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiBmaWxsPSIjMWExZjJlIi8+PC9zdmc+');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.8;
             z-index: 0;
             pointer-events: none;
         }
@@ -52,29 +51,45 @@
             right: 50px;
             z-index: 1000;
             display: flex;
-            gap: 20px;
+            gap: 0;
+            align-items: center;
         }
 
         nav button {
-            background: white;
-            border: 2px solid #333;
+            background: transparent;
+            border: none;
+            color: #ffffff;
             padding: 10px 25px;
             cursor: pointer;
             font-size: 16px;
-            font-weight: 500;
+            font-weight: 400;
             transition: all 0.3s ease;
-            border-radius: 5px;
+            position: relative;
+            letter-spacing: 0.5px;
+        }
+
+        nav button::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        nav button:first-child::before {
+            display: none;
         }
 
         nav button:hover {
-            background: #333;
-            color: white;
+            color: #ff6b4a;
         }
 
         nav button.active {
-            background: #dc143c;
-            color: white;
-            border-color: #dc143c;
+            color: #ff6b4a;
+            font-weight: 500;
         }
 
         /* Pages */
@@ -98,10 +113,11 @@
         /* Home Page */
         #home {
             display: flex;
-            align-items: center;
-            justify-content: center;
+            align-items: flex-end;
+            justify-content: flex-start;
             min-height: 100vh;
-            padding-bottom: 20vh;
+            padding-bottom: 15vh;
+            padding-left: 80px;
         }
 
         .home-content {
@@ -109,23 +125,26 @@
         }
 
         .logo {
-            font-size: 72px;
-            font-weight: bold;
-            margin-bottom: 10px;
+            font-size: 96px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: -2px;
         }
 
         .logo-black {
-            color: #000;
+            color: #ffffff;
         }
 
         .logo-red {
-            color: #dc143c;
+            color: #ff6b4a;
         }
 
         .subtitle {
-            font-size: 20px;
-            color: #555;
+            font-size: 22px;
+            color: rgba(255, 255, 255, 0.8);
             font-weight: 300;
+            letter-spacing: 0.5px;
+            max-width: 600px;
         }
 
         /* About Page */
@@ -137,20 +156,21 @@
             max-width: 800px;
             margin: 0 auto;
             text-align: left;
-            background: white;
+            background: rgba(30, 36, 51, 0.9);
             padding: 40px;
             border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 107, 74, 0.1);
         }
 
         .about-content h1 {
             margin-bottom: 20px;
-            color: #333;
+            color: #ffffff;
         }
 
         .about-content p {
             line-height: 1.8;
-            color: #666;
+            color: rgba(255, 255, 255, 0.8);
             margin-bottom: 15px;
         }
 
@@ -163,16 +183,22 @@
         .imputation-content {
             max-width: 900px;
             margin: 0 auto;
-            background: white;
+            background: rgba(30, 36, 51, 0.9);
             padding: 40px;
             border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 107, 74, 0.1);
         }
 
         .imputation-content h1 {
             margin-bottom: 30px;
-            color: #333;
+            color: #ffffff;
             text-align: center;
+        }
+
+        .imputation-content h2 {
+            color: #ffffff;
+            margin-bottom: 20px;
         }
 
         .step {
@@ -184,23 +210,28 @@
         }
 
         .upload-area {
-            border: 3px dashed #ccc;
+            border: 3px dashed rgba(255, 107, 74, 0.4);
             border-radius: 10px;
             padding: 60px 20px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
             margin-bottom: 20px;
+            background: rgba(255, 107, 74, 0.05);
         }
 
         .upload-area:hover {
-            border-color: #dc143c;
-            background: #fafafa;
+            border-color: #ff6b4a;
+            background: rgba(255, 107, 74, 0.1);
         }
 
         .upload-area.dragover {
-            border-color: #dc143c;
-            background: #fff5f5;
+            border-color: #ff6b4a;
+            background: rgba(255, 107, 74, 0.15);
+        }
+
+        .upload-area h3, .upload-area p {
+            color: #ffffff;
         }
 
         input[type="file"] {
@@ -208,7 +239,7 @@
         }
 
         .btn {
-            background: #dc143c;
+            background: #ff6b4a;
             color: white;
             border: none;
             padding: 12px 30px;
@@ -217,18 +248,23 @@
             border-radius: 5px;
             transition: all 0.3s ease;
             margin: 10px 5px;
+            font-family: 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
         }
 
         .btn:hover {
-            background: #b01030;
+            background: #ff8566;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 74, 0.4);
         }
 
         .btn-secondary {
-            background: #666;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         .btn-secondary:hover {
-            background: #444;
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
         }
 
         table {
@@ -236,17 +272,24 @@
             border-collapse: collapse;
             margin: 20px 0;
             font-size: 14px;
+            background: rgba(255, 255, 255, 0.05);
         }
 
         table th, table td {
-            border: 1px solid #ddd;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 10px;
             text-align: left;
+            color: rgba(255, 255, 255, 0.9);
         }
 
         table th {
-            background: #f5f5f5;
+            background: rgba(255, 107, 74, 0.2);
             font-weight: 600;
+            color: #ffffff;
+        }
+
+        table td em {
+            color: #ff6b4a;
         }
 
         .method-selection {
@@ -257,27 +300,36 @@
         }
 
         .method-card {
-            border: 2px solid #ddd;
+            border: 2px solid rgba(255, 107, 74, 0.3);
             border-radius: 10px;
             padding: 30px 20px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
+            background: rgba(255, 107, 74, 0.05);
         }
 
         .method-card:hover {
-            border-color: #dc143c;
-            background: #fff5f5;
+            border-color: #ff6b4a;
+            background: rgba(255, 107, 74, 0.15);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(255, 107, 74, 0.3);
         }
 
         .method-card.selected {
-            border-color: #dc143c;
-            background: #fff5f5;
+            border-color: #ff6b4a;
+            background: rgba(255, 107, 74, 0.2);
+            box-shadow: 0 4px 12px rgba(255, 107, 74, 0.4);
         }
 
         .method-card h3 {
             margin-bottom: 10px;
-            color: #333;
+            color: #ffffff;
+        }
+
+        .method-card p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
         }
 
         .form-group {
@@ -288,20 +340,24 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 500;
-            color: #333;
+            color: rgba(255, 255, 255, 0.9);
         }
 
         .form-group input, .form-group select {
             width: 100%;
             padding: 10px;
-            border: 2px solid #ddd;
+            border: 2px solid rgba(255, 107, 74, 0.3);
             border-radius: 5px;
             font-size: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            font-family: 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
         }
 
         .form-group input:focus, .form-group select:focus {
             outline: none;
-            border-color: #dc143c;
+            border-color: #ff6b4a;
+            background: rgba(255, 255, 255, 0.08);
         }
 
         .radio-group {
@@ -323,8 +379,8 @@
         }
 
         .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #dc143c;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top: 4px solid #ff6b4a;
             border-radius: 50%;
             width: 60px;
             height: 60px;
@@ -340,7 +396,7 @@
         .progress-bar {
             width: 100%;
             height: 30px;
-            background: #f0f0f0;
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 15px;
             overflow: hidden;
             margin: 20px 0;
@@ -348,7 +404,7 @@
 
         .progress-fill {
             height: 100%;
-            background: #dc143c;
+            background: linear-gradient(90deg, #ff6b4a, #ff8566);
             width: 0%;
             transition: width 0.3s ease;
             display: flex;
@@ -359,27 +415,48 @@
         }
 
         .info-box {
-            background: #f0f8ff;
-            border-left: 4px solid #dc143c;
+            background: rgba(255, 107, 74, 0.1);
+            border-left: 4px solid #ff6b4a;
             padding: 15px;
             margin: 20px 0;
             border-radius: 5px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .info-box strong {
+            color: #ffffff;
         }
 
         .warning-box {
-            background: #fff3cd;
+            background: rgba(255, 193, 7, 0.1);
             border-left: 4px solid #ffc107;
             padding: 15px;
             margin: 20px 0;
             border-radius: 5px;
+            color: rgba(255, 255, 255, 0.9);
         }
 
         .error-box {
-            background: #f8d7da;
-            border-left: 4px solid #dc3545;
+            background: rgba(255, 82, 82, 0.1);
+            border-left: 4px solid #ff5252;
             padding: 15px;
             margin: 20px 0;
             border-radius: 5px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .progress-container {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .progress-container h2 {
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        .progress-container p {
+            color: rgba(255, 255, 255, 0.8);
         }
 
         .button-group {
@@ -523,8 +600,8 @@
         let missingCount = 0;
         let imputedData = null;
         
-        // API URL do render
-        const API_URL = 'https://iscak-backend-api.onrender.com';  
+        // API URL - ALTERAR DEPOIS DO DEPLOY NO RENDER
+        const API_URL = 'https://your-api-name.onrender.com';  // MUDAR ISTO!
 
         // Navigation
         function showPage(pageName) {
