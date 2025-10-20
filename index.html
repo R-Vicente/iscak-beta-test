@@ -20,22 +20,23 @@
             overflow-x: hidden;
         }
 
-     body::before {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: url('back3.jpg');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        opacity: 0.3;
-        z-index: 0;
-        pointer-events: none;
-    }
-        
+        /* Abstract curved lines background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(ellipse at 20% 30%, transparent 40%, #d0d0d0 41%, transparent 42%),
+                radial-gradient(ellipse at 80% 70%, transparent 45%, #c5c5c5 46%, transparent 47%),
+                radial-gradient(ellipse at 50% 50%, transparent 50%, #d5d5d5 51%, transparent 52%);
+            opacity: 0.3;
+            z-index: 0;
+            pointer-events: none;
+        }
+
         .container {
             position: relative;
             z-index: 1;
@@ -523,8 +524,7 @@
         let imputedData = null;
         
         // API URL do render
-        const API_URL = 'https://iscak-backend.onrender.com'; 
-        
+        const API_URL = 'https://iscak-backend-api.onrender.com';  
 
         // Navigation
         function showPage(pageName) {
