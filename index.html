@@ -477,6 +477,7 @@
         <button onclick="showPage('home')" class="nav-btn active" data-page="home">Home</button>
         <button onclick="showPage('about')" class="nav-btn" data-page="about">About</button>
         <button onclick="showPage('imputation')" class="nav-btn" data-page="imputation">Imputation</button>
+        <button onclick="showPage('privacy')" class="nav-btn" data-page="privacy">Data Privacy</button>
     </nav>
 
     <div class="container">
@@ -590,6 +591,42 @@
                 </div>
             </div>
         </div>
+
+                <!-- PRIVACY PAGE -->
+        <div id="privacy" class="page">
+            <div class="about-content">
+                <h1>Privacy & Data Protection</h1>
+        
+                <p><strong>Your data privacy is our priority.</strong></p>
+        
+                <p><strong>LOCAL PROCESSING (k-NN, MICE, MissForest):</strong><br>
+                - All processing occurs locally, directly in your browser<br>
+                - Your data NEVER leaves your browser<br>
+                - 100% client-side processing<br>
+                - Zero data transmission to servers<br>
+                - No storage, no tracking, no logs</p>
+        
+                <p><strong>CLOUD PROCESSING (ISCA-k):</strong><br>
+                - Data temporarily sent to secure EU server (Render.com - Frankfurt)<br>
+                - Processed in-memory only (never written to disk)<br>
+                - Automatically deleted after response<br>
+                - HTTPS encrypted transmission<br>
+                - No permanent storage or data retention<br>
+                - Technical logs are disabled, but minimal metadata (timestamps and file sizes only) may temporarily remain on the server during normal use<br>
+                - We do NOT store, sell, or share your actual data</p>
+        
+                <p><strong>SECURITY:</strong><br>
+                - HTTPS/TLS encryption<br>
+                - No authentication = no user tracking<br>
+                - No cookies, no analytics<br>
+                - Open-source code (audit on GitHub)</p>
+        
+                <p><strong>RECOMMENDATIONS:</strong><br>
+                - Anonymize data before upload<br>
+                - Do not upload personal identifiable information (PII)</p>
+            </div>
+        </div>
+
     </div>
 
     <script>
