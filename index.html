@@ -589,9 +589,13 @@
                 <h1>About ISCA-k</h1>
                 
                 <p><strong>ISCA-k</strong> is an advanced method for imputing (filling in) missing data. It enhances traditional k-Nearest Neighbors (KNN) approaches through three key innovations:</p>
-                    <li><strong>Intelligent Feature Weighting:</strong> The method first calculates Mutual Information (MI) between all variables. This identifies which features are most predictive for the variable with missing data. When calculating similarity, ISCA-k gives proportionally more weight to these highly predictive features and less to irrelevant ones.</li>
-                    <li><strong>Adaptive 'k' (Neighbors):</strong> Instead of using a fixed number of neighbors, ISCA-k uses an adaptive mechanism based on a "trust factor." If potential neighbors are very similar (distances are tightly clustered), the method uses more neighbors. If they are dissimilar (distances are widely dispersed), it uses fewer neighbors to avoid contamination from poor matches.</li>
-                    <li><strong>Mixed-Data Handling:</strong> The method effectively handles datasets containing both numeric and categorical variables. It uses type-specific normalization to ensure numeric variables don't dominate the similarity calculations simply because of differences in their scale.</li><br>
+                
+                <p><strong>1. Intelligent Feature Weighting:</strong> The method first calculates Mutual Information (MI) between all variables. This identifies which features are most predictive for the variable with missing data. When calculating similarity, ISCA-k gives proportionally more weight to these highly predictive features and less to irrelevant ones.</p>
+                
+                <p><strong>2. Adaptive 'k' (Neighbors):</strong> Instead of using a fixed number of neighbors, ISCA-k uses an adaptive mechanism based on a "trust factor." If potential neighbors are very similar (distances are tightly clustered), the method uses more neighbors. If they are dissimilar (distances are widely dispersed), it uses fewer neighbors to avoid contamination from poor matches.</p>
+                
+                <p><strong>3. Mixed-Data Handling:</strong> The method effectively handles datasets containing both numeric and categorical variables. It uses type-specific normalization to ensure numeric variables don't dominate the similarity calculations simply because of differences in their scale.</p>
+
                 <h2>Purpose of This Site</h2>
                 
                 <p>This website serves as a beta testing platform where you can test <strong>ISCA-k</strong> on your own datasets and provide valuable feedback. Your input is crucial for refining the method and identifying potential improvements before its final release.</p>
