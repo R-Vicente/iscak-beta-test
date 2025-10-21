@@ -174,6 +174,51 @@
             margin-bottom: 15px;
         }
 
+        /* Privacy Page */
+        #privacy {
+            padding-top: 120px;
+        }
+
+        .privacy-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: left;
+            background: rgba(30, 36, 51, 0.9);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 107, 74, 0.1);
+        }
+
+        .privacy-content h1 {
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+
+        .privacy-content p {
+            line-height: 1.8;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 15px;
+        }
+
+        .page-pri {
+            display: none;
+            min-height: 100vh;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .page-pri.active {
+            display: block;
+            opacity: 1;
+            position: relative;
+            margin-top:110px
+        }
+
         /* Imputation Page */
         #imputation {
             padding-top: 120px;
@@ -593,11 +638,9 @@
         </div>
 
                 <!-- PRIVACY PAGE -->
-        <div id="privacy" class="page">
-            <div class="about-content">
+        <div id="privacy" class="page-pri">
+            <div class="privacy-content">
                 <h1>Privacy & Data Protection</h1>
-        
-                <p><strong>Your data privacy is our priority.</strong></p>
         
                 <p><strong>LOCAL PROCESSING (k-NN, MICE, MissForest):</strong><br>
                 - All processing occurs locally, directly in your browser<br>
