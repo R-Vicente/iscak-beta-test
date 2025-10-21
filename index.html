@@ -686,7 +686,7 @@
         // Navigation
         function showPage(pageName) {
             // Fade out current page
-            const currentPage = document.querySelector('.page.active');
+            const currentPage = document.querySelector('.page.active, .page-pri.active');
             if (currentPage) {
                 currentPage.style.opacity = '0';
                 setTimeout(() => {
