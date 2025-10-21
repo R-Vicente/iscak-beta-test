@@ -26,7 +26,6 @@
             font-family: 'Exo','Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
             background: #011136;
             min-height: 100vh;
-            height: 100vh;
             position: relative;
             overflow-x: hidden;
         }
@@ -53,7 +52,6 @@
             max-width: 95%;
             margin: 0 auto;
             padding: 20px;
-            height: 100%;
             overflow-y: auto; 
         }
 
@@ -128,11 +126,9 @@
             display: flex;
             align-items: flex-end;
             justify-content: flex-start;
-            min-height: 100vh;
-            height: 100vh;
+            min-height: calc(100vh-120px);
             padding-bottom: 15vh;
             padding-left: 80px;
-            overflow: hidden;
         }
 
         .home-content {
@@ -140,6 +136,7 @@
             user-select: none;
             -webkit-user-select: none;
             -moz-user-select: none; 
+            cursor: default;
         }
 
         .logo {
@@ -170,8 +167,6 @@
         /* About Page */
         #about {
             padding-top: 120px;
-            overflow-y: auto; 
-            height: 100vh; 
         }
 
         .about-content {
@@ -180,6 +175,7 @@
             text-align: left;
             background: rgba(30, 36, 51, 0.9);
             padding: 40px;
+            min-height: calc(100vh-120px);
             border-radius: 10px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 107, 74, 0.1);
@@ -199,8 +195,6 @@
         /* Privacy Page */
         #privacy {
             padding-top: 120px;
-            overflow-y: auto; 
-            height: 100vh; 
         }
 
         .privacy-content {
@@ -208,6 +202,7 @@
             margin: 0 auto;
             text-align: left;
             background: rgba(30, 36, 51, 0.9);
+            min-height: calc(100vh-120px);
             padding: 40px;
             border-radius: 10px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
