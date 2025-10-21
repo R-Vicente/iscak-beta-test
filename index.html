@@ -587,10 +587,23 @@
         <div id="about" class="page">
             <div class="about-content">
                 <h1>About ISCA-k</h1>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
-                <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+                
+                <p><strong>ISCA-k</strong> is an advanced method for imputing (filling in) missing data. It enhances traditional k-Nearest Neighbors (KNN) approaches through three key innovations:</p>
+                
+                <ol>
+                    <li><strong>Intelligent Feature Weighting:</strong> The method first calculates Mutual Information (MI) between all variables. This identifies which features are most predictive for the variable with missing data. When calculating similarity, ISCA-k gives proportionally more weight to these highly predictive features and less to irrelevant ones.</li>
+                    <li><strong>Adaptive 'k' (Neighbors):</strong> Instead of using a fixed number of neighbors, ISCA-k uses an adaptive mechanism based on a "trust factor." If potential neighbors are very similar (distances are tightly clustered), the method uses more neighbors. If they are dissimilar (distances are widely dispersed), it uses fewer neighbors to avoid contamination from poor matches.</li>
+                    <li><strong>Mixed-Data Handling:</strong> The method effectively handles datasets containing both numeric and categorical variables. It uses type-specific normalization to ensure numeric variables don't dominate the similarity calculations simply because of differences in their scale.</li>
+                </ol>
+
+                <h2>Purpose of This Site</h2>
+                
+                <p>This website serves as a beta testing platform where you can test <strong>ISCA-k</strong> on your own datasets and provide valuable feedback. Your input is crucial for refining the method and identifying potential improvements before its final release.</p>
+                
+                <p>This work is part of my Master's thesis in Data Analysis and Decision Support Systems at ISCAC - Coimbra Business School. By participating in this beta test, you are directly contributing to academic research aimed at advancing missing data imputation techniques.</p>
+                
+                <p><strong>How to participate:</strong> Simply upload your dataset, configure the imputation parameters, and download your results. We strongly encourage you to share your experience and any issues you encounter through the feedback form.</p>
+                
             </div>
         </div>
 
