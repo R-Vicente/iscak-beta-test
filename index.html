@@ -205,6 +205,43 @@
             margin-top: 30px; /* ou o valor que quiseres */
         }
 
+        .privacy-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+          gap: 30px;
+        }
+        
+        .privacy-section {
+          background: rgba(255, 255, 255, 0.05);
+          border-radius: 10px;
+          padding: 20px;
+          border: 1px solid rgba(255, 107, 74, 0.1);
+        }
+        
+        .privacy-section strong {
+          color: #ff6b4a;
+          display: block;
+          margin-bottom: 10px;
+        }
+        
+        .privacy-section ul {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+        }
+        
+        .privacy-section li {
+          line-height: 1.6;
+          color: rgba(255, 255, 255, 0.8);
+          margin-bottom: 6px;
+        }
+        
+        .privacy-section li::before {
+          content: "• ";
+          color: #ff6b4a;
+          font-weight: bold;
+        }
+
         /* Imputation Page */
         #imputation {
             padding-top: 120px;
@@ -635,38 +672,57 @@
             </div>
         </div>
 
-                <!-- PRIVACY PAGE -->
+
         <div id="privacy" class="page">
-            <div class="privacy-content">
-                <h1>Privacy & Data Protection</h1>
+          <div class="privacy-content">
+            <h1>Privacy & Data Protection</h1>
         
-                <p><strong>LOCAL PROCESSING (k-NN, MICE, MissForest):</strong><br>
-                - All processing occurs locally, directly in your browser<br>
-                - Your data NEVER leaves your browser<br>
-                - 100% client-side processing<br>
-                - Zero data transmission to servers<br>
-                - No storage, no tracking, no logs</p>
+            <div class="privacy-grid">
+              <div class="privacy-section">
+                <strong>LOCAL PROCESSING (k-NN, MICE, MissForest)</strong>
+                <ul>
+                  <li>All processing occurs locally, directly in your browser</li>
+                  <li>Your data NEVER leaves your browser</li>
+                  <li>100% client-side processing</li>
+                  <li>Zero data transmission to servers</li>
+                  <li>No storage, no tracking, no logs</li>
+                </ul>
+              </div>
         
-                <p><strong>CLOUD PROCESSING (ISCA-k):</strong><br>
-                - Data temporarily sent to secure EU server (Render.com - Frankfurt)<br>
-                - Processed in-memory only (never written to disk)<br>
-                - Automatically deleted after response<br>
-                - HTTPS encrypted transmission<br>
-                - No permanent storage or data retention<br>
-                - Technical logs are disabled, but minimal metadata (timestamps and file sizes only) may temporarily remain on the server during normal use<br>
-                - We do NOT store, sell, or share your actual data</p>
+              <div class="privacy-section">
+                <strong>CLOUD PROCESSING (ISCA-k)</strong>
+                <ul>
+                  <li>Data temporarily sent to secure EU server (Render.com - Frankfurt)</li>
+                  <li>Processed in-memory only (never written to disk)</li>
+                  <li>Automatically deleted after response</li>
+                  <li>HTTPS encrypted transmission</li>
+                  <li>No permanent storage or data retention</li>
+                  <li>Minimal metadata (timestamps, file sizes) may remain temporarily</li>
+                  <li>We do NOT store, sell, or share your data</li>
+                </ul>
+              </div>
         
-                <p><strong>SECURITY:</strong><br>
-                - HTTPS/TLS encryption<br>
-                - No authentication = no user tracking<br>
-                - No cookies, no analytics<br>
-                - Open-source code (audit on GitHub)</p>
+              <div class="privacy-section">
+                <strong>SECURITY</strong>
+                <ul>
+                  <li>HTTPS/TLS encryption</li>
+                  <li>No authentication = no user tracking</li>
+                  <li>No cookies, no analytics</li>
+                  <li>Open-source code (audit on GitHub)</li>
+                </ul>
+              </div>
         
-                <p><strong>RECOMMENDATIONS:</strong><br>
-                - Anonymize data before upload<br>
-                - Do not upload personal identifiable information (PII)</p>
+              <div class="privacy-section">
+                <strong>RECOMMENDATIONS</strong>
+                <ul>
+                  <li>Anonymize data before upload</li>
+                  <li>Do not upload personal identifiable information (PII)</li>
+                </ul>
+              </div>
             </div>
+          </div>
         </div>
+
 
     </div>
 
