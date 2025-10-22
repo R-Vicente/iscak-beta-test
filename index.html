@@ -2299,8 +2299,18 @@
                         });
 
                         // Store original for MICE/MissForest (they need it as global reference)
+                        // They need the ORIGINAL data WITHOUT missings to know which rows to train on
                         const originalDataBackup = window.originalData;
-                        window.originalData = JSON.parse(JSON.stringify(dataObj));
+
+                        // Convert original array data (without missings) to object format
+                        const originalDataObj = testConfig.originalData.map(row => {
+                            const obj = {};
+                            row.forEach((val, idx) => {
+                                obj[columnNames[idx]] = val;
+                            });
+                            return obj;
+                        });
+                        window.originalData = originalDataObj;
 
                         // Perform imputation
                         const startTime = performance.now();
