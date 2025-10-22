@@ -1881,23 +1881,42 @@
                             // Simple linear regression: use mean of similar cases
                             // For each missing value, find k nearest neighbors and average
                             missingIndices.forEach(idx => {
-                                const queryFeatures = otherCols.map(col => result[idx][col]);
+                                const queryFeatures = otherCols.map(col => {
+                                    const val = result[idx][col];
+                                    return (val == null || isNaN(val)) ? 0 : val;
+                                });
 
                                 // Calculate distances to all training points
                                 const distances = trainIndices.map(trainIdx => {
-                                    const trainFeatures = otherCols.map(col => result[trainIdx][col]);
+                                    const trainFeatures = otherCols.map(col => {
+                                        const val = result[trainIdx][col];
+                                        return (val == null || isNaN(val)) ? 0 : val;
+                                    });
                                     let dist = 0;
+                                    let validDims = 0;
                                     for (let i = 0; i < queryFeatures.length; i++) {
-                                        const diff = queryFeatures[i] - trainFeatures[i];
-                                        dist += diff * diff;
+                                        if (!isNaN(queryFeatures[i]) && !isNaN(trainFeatures[i])) {
+                                            const diff = queryFeatures[i] - trainFeatures[i];
+                                            dist += diff * diff;
+                                            validDims++;
+                                        }
                                     }
-                                    return { idx: trainIdx, dist: Math.sqrt(dist) };
+                                    // Normalize by number of valid dimensions
+                                    return { idx: trainIdx, dist: validDims > 0 ? Math.sqrt(dist / validDims) : Infinity };
                                 });
 
-                                // Sort by distance and take top k neighbors
-                                distances.sort((a, b) => a.dist - b.dist);
-                                const k = Math.min(5, trainIndices.length);
-                                const neighbors = distances.slice(0, k);
+                                // Filter out invalid distances and sort
+                                const validDistances = distances.filter(d => d.dist !== Infinity && !isNaN(d.dist));
+                                if (validDistances.length === 0) {
+                                    // Fallback: use mean of training values
+                                    const meanVal = trainIndices.reduce((sum, i) => sum + result[i][targetCol], 0) / trainIndices.length;
+                                    result[idx][targetCol] = meanVal;
+                                    return;
+                                }
+
+                                validDistances.sort((a, b) => a.dist - b.dist);
+                                const k = Math.min(5, validDistances.length);
+                                const neighbors = validDistances.slice(0, k);
 
                                 // Weighted average (inverse distance weighting)
                                 let sumWeights = 0;
@@ -1908,7 +1927,7 @@
                                     sumValues += weight * result[neighbor.idx][targetCol];
                                 });
 
-                                result[idx][targetCol] = sumValues / sumWeights;
+                                result[idx][targetCol] = sumWeights > 0 ? sumValues / sumWeights : result[idx][targetCol];
                             });
                         }
                     }
