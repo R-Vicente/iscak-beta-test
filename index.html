@@ -1852,7 +1852,7 @@
                     // Build list of indices with non-missing values for this column
                     const trainIndices = [];
                     for (let i = 0; i < result.length; i++) {
-                        if (originalData[i][targetCol] != null && originalData[i][targetCol] !== '') {
+                        if (window.originalData && window.originalData[i] && window.originalData[i][targetCol] != null && window.originalData[i][targetCol] !== '') {
                             trainIndices.push(i);
                         }
                     }
@@ -1861,7 +1861,7 @@
                         // Find indices with missing values for this column
                         const missingIndices = [];
                         for (let i = 0; i < result.length; i++) {
-                            if (originalData[i][targetCol] == null || originalData[i][targetCol] === '') {
+                            if (window.originalData && window.originalData[i] && (window.originalData[i][targetCol] == null || window.originalData[i][targetCol] === '')) {
                                 missingIndices.push(i);
                             }
                         }
@@ -1910,11 +1910,13 @@
                     const missingRows = [];
                     
                     result.forEach((row, idx) => {
-                        const origVal = originalData[idx][targetCol];
-                        if (origVal != null && origVal !== '' && !isNaN(origVal)) {
-                            completeRows.push(row);
-                        } else {
-                            missingRows.push(row);
+                        if (window.originalData && window.originalData[idx]) {
+                            const origVal = window.originalData[idx][targetCol];
+                            if (origVal != null && origVal !== '' && !isNaN(origVal)) {
+                                completeRows.push(row);
+                            } else {
+                                missingRows.push(row);
+                            }
                         }
                     });
                     
