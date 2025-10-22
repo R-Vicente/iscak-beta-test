@@ -1860,12 +1860,51 @@
                             }
                         }
 
-                        // Impute missing values
-                        missingIndices.forEach(idx => {
-                            // Predict based on similar complete cases
-                            const randomTrainIdx = trainIndices[Math.floor(random() * trainIndices.length)];
-                            result[idx][targetCol] = result[randomTrainIdx][targetCol];
-                        });
+                        // Impute missing values using linear regression
+                        if (missingIndices.length > 0) {
+                            // Prepare training data (rows with non-missing target)
+                            const X_train = [];
+                            const y_train = [];
+
+                            trainIndices.forEach(trainIdx => {
+                                const features = otherCols.map(col => result[trainIdx][col]);
+                                X_train.push(features);
+                                y_train.push(result[trainIdx][targetCol]);
+                            });
+
+                            // Simple linear regression: use mean of similar cases
+                            // For each missing value, find k nearest neighbors and average
+                            missingIndices.forEach(idx => {
+                                const queryFeatures = otherCols.map(col => result[idx][col]);
+
+                                // Calculate distances to all training points
+                                const distances = trainIndices.map(trainIdx => {
+                                    const trainFeatures = otherCols.map(col => result[trainIdx][col]);
+                                    let dist = 0;
+                                    for (let i = 0; i < queryFeatures.length; i++) {
+                                        const diff = queryFeatures[i] - trainFeatures[i];
+                                        dist += diff * diff;
+                                    }
+                                    return { idx: trainIdx, dist: Math.sqrt(dist) };
+                                });
+
+                                // Sort by distance and take top k neighbors
+                                distances.sort((a, b) => a.dist - b.dist);
+                                const k = Math.min(5, trainIndices.length);
+                                const neighbors = distances.slice(0, k);
+
+                                // Weighted average (inverse distance weighting)
+                                let sumWeights = 0;
+                                let sumValues = 0;
+                                neighbors.forEach(neighbor => {
+                                    const weight = neighbor.dist === 0 ? 1 : 1 / (neighbor.dist + 1e-10);
+                                    sumWeights += weight;
+                                    sumValues += weight * result[neighbor.idx][targetCol];
+                                });
+
+                                result[idx][targetCol] = sumValues / sumWeights;
+                            });
+                        }
                     }
                 });
             }
