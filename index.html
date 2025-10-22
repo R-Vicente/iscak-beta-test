@@ -24,14 +24,20 @@
 
         html {
             overflow-x: hidden;
+            height: 100%;
         }
 
         body {
             font-family: 'Exo','Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
             background: #011136;
-            min-height: 100vh;
+            height: 100%;
             position: relative;
             overflow-x: hidden;
+        }
+
+        body.home-page {
+            overflow: hidden;
+            height: 100vh;
         }
 
         /* Background image 
@@ -67,6 +73,10 @@
             display: flex;
             gap: 0;
             align-items: center;
+            background: linear-gradient(to left, rgba(1, 17, 54, 0.95) 0%, rgba(1, 17, 54, 0.85) 70%, transparent 100%);
+            padding: 5px 20px 5px 40px;
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
         }
 
         nav button {
@@ -574,7 +584,7 @@
         }
     </style>
 </head>
-<body>
+<body class="home-page">
     <nav>
         <button onclick="showPage('home')" class="nav-btn active" data-page="home">Home</button>
         <button onclick="showPage('about')" class="nav-btn" data-page="about">About</button>
@@ -783,7 +793,7 @@
                 currentPage.style.opacity = '0';
                 setTimeout(() => {
                     currentPage.classList.remove('active');
-                    
+
                     // Fade in new page
                     const newPage = document.getElementById(pageName);
                     newPage.classList.add('active');
@@ -794,16 +804,23 @@
             } else {
                 document.getElementById(pageName).classList.add('active');
             }
-            
+
             // Update nav buttons
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             document.querySelector(`[data-page="${pageName}"]`).classList.add('active');
-            
+
+            // Toggle body overflow based on page
+            if (pageName === 'home') {
+                document.body.classList.add('home-page');
+            } else {
+                document.body.classList.remove('home-page');
+            }
+
             // Reset imputation page when navigating to it
             if (pageName === 'imputation') {
                 resetImputation();
             }
-            
+
             // Scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
