@@ -275,6 +275,149 @@
           font-weight: bold;
         }
 
+        /* Feedback Page */
+        #feedback {
+            padding-top: 120px;
+            padding-bottom: 50px;
+            min-height: 100vh;
+            overflow-y: auto;
+        }
+
+        .feedback-content {
+            max-width: 700px;
+            margin: 0 auto;
+            background: rgba(30, 36, 51, 0.9);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 107, 74, 0.1);
+        }
+
+        .feedback-content h1 {
+            margin-bottom: 10px;
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .feedback-content .subtitle-feedback {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .form-section {
+            margin-bottom: 25px;
+        }
+
+        .form-section label {
+            display: block;
+            color: #ff6b4a;
+            font-weight: 500;
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+
+        .form-section input[type="number"],
+        .form-section input[type="email"],
+        .form-section select,
+        .form-section textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid rgba(255, 107, 74, 0.3);
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+            font-family: 'Exo', sans-serif;
+            font-size: 14px;
+        }
+
+        .form-section textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-section input:focus,
+        .form-section select:focus,
+        .form-section textarea:focus {
+            outline: none;
+            border-color: #ff6b4a;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 400;
+            cursor: pointer;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .radio-group-feedback {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .radio-group-feedback label {
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 400;
+            cursor: pointer;
+        }
+
+        .radio-group-feedback input[type="radio"] {
+            margin-right: 8px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .dataset-shape-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .shape-input-wrapper label {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 5px;
+        }
+
+        .submit-section {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .success-message {
+            background: rgba(76, 175, 80, 0.2);
+            border-left: 4px solid #4caf50;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+            color: rgba(255, 255, 255, 0.9);
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
         /* Imputation Page */
         #imputation {
             padding-top: 120px;
@@ -589,6 +732,7 @@
         <button onclick="showPage('home')" class="nav-btn active" data-page="home">Home</button>
         <button onclick="showPage('about')" class="nav-btn" data-page="about">About</button>
         <button onclick="showPage('imputation')" class="nav-btn" data-page="imputation">Imputation</button>
+        <button onclick="showPage('feedback')" class="nav-btn" data-page="feedback">Feedback</button>
         <button onclick="showPage('privacy')" class="nav-btn" data-page="privacy">Data Privacy</button>
     </nav>
 
@@ -720,6 +864,109 @@
             </div>
         </div>
 
+        <!-- FEEDBACK PAGE -->
+        <div id="feedback" class="page">
+            <div class="feedback-content">
+                <h1>Feedback Form</h1>
+                <p class="subtitle-feedback">Your feedback is essential for improving ISCA-k. Please share your experience!</p>
+
+                <div class="success-message" id="successMessage">
+                    <strong>Thank you!</strong> Your feedback has been submitted successfully.
+                </div>
+
+                <form id="feedbackForm" action="https://formsubmit.co/vicentericardo0@gmail.com" method="POST">
+                    <!-- Hidden fields for FormSubmit configuration -->
+                    <input type="hidden" name="_subject" value="New ISCA-k Feedback Submission">
+                    <input type="hidden" name="_captcha" value="false">
+                    <input type="hidden" name="_template" value="table">
+
+                    <!-- User Type -->
+                    <div class="form-section">
+                        <label>User Type *</label>
+                        <select name="user_type" required>
+                            <option value="">Select your profile...</option>
+                            <option value="Student">Student</option>
+                            <option value="Academic">Academic</option>
+                            <option value="Professional">Professional</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <!-- Dataset Shape -->
+                    <div class="form-section">
+                        <label>Dataset Shape *</label>
+                        <div class="dataset-shape-inputs">
+                            <div class="shape-input-wrapper">
+                                <label>Number of Rows</label>
+                                <input type="number" name="dataset_rows" placeholder="e.g., 1000" min="1" required>
+                            </div>
+                            <div class="shape-input-wrapper">
+                                <label>Number of Columns</label>
+                                <input type="number" name="dataset_columns" placeholder="e.g., 10" min="1" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Methods Used -->
+                    <div class="form-section">
+                        <label>Methods Used * (select one or more)</label>
+                        <div class="checkbox-group">
+                            <label>
+                                <input type="checkbox" name="method_iscak" value="ISCA-k">
+                                ISCA-k
+                            </label>
+                            <label>
+                                <input type="checkbox" name="method_knn" value="k-NN">
+                                k-NN
+                            </label>
+                            <label>
+                                <input type="checkbox" name="method_mice" value="MICE">
+                                MICE
+                            </label>
+                            <label>
+                                <input type="checkbox" name="method_missforest" value="MissForest">
+                                MissForest
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Dataset Type -->
+                    <div class="form-section">
+                        <label>Dataset Type *</label>
+                        <div class="radio-group-feedback">
+                            <label>
+                                <input type="radio" name="dataset_type" value="Real" required>
+                                Real Dataset
+                            </label>
+                            <label>
+                                <input type="radio" name="dataset_type" value="Synthetic" required>
+                                Synthetic Dataset
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Feedback Text -->
+                    <div class="form-section">
+                        <label>Your Feedback *</label>
+                        <textarea name="feedback_text" placeholder="Please share your experience, suggestions, or any issues you encountered..." required></textarea>
+                    </div>
+
+                    <!-- Email (optional) -->
+                    <div class="form-section">
+                        <label>Email (optional)</label>
+                        <input type="email" name="email" placeholder="your.email@example.com">
+                        <small style="color: rgba(255, 255, 255, 0.6); font-size: 12px; display: block; margin-top: 5px;">
+                            Provide your email if you'd like us to follow up on your feedback
+                        </small>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="submit-section">
+                        <button type="submit" class="btn">Submit Feedback</button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
         <div id="privacy" class="page">
           <div class="privacy-content">
@@ -1425,6 +1672,28 @@
                 card.classList.remove('selected');
             });
         }
+
+        // Feedback Form Validation and Submission
+        document.addEventListener('DOMContentLoaded', function() {
+            const feedbackForm = document.getElementById('feedbackForm');
+
+            if (feedbackForm) {
+                feedbackForm.addEventListener('submit', function(e) {
+                    // Validate that at least one method is selected
+                    const methodCheckboxes = feedbackForm.querySelectorAll('input[name^="method_"]');
+                    const isAnyMethodChecked = Array.from(methodCheckboxes).some(cb => cb.checked);
+
+                    if (!isAnyMethodChecked) {
+                        e.preventDefault();
+                        alert('Please select at least one imputation method that you used.');
+                        return false;
+                    }
+
+                    // Show success message after a short delay (form will redirect to FormSubmit)
+                    // Note: FormSubmit will redirect to their confirmation page
+                });
+            }
+        });
     </script>
 </body>
 </html>
