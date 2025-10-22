@@ -12,7 +12,6 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            overflow-y:clip;
         }
 
         .btn,
@@ -22,6 +21,10 @@
           font-family: 'Exo', sans-serif;
         }
 
+
+        html {
+            overflow-x: hidden;
+        }
 
         body {
             font-family: 'Exo','Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
@@ -53,7 +56,6 @@
             max-width: 95%;
             margin: 0 auto;
             padding: 20px;
-            overflow-y: auto; 
         }
 
         /* Navigation */
@@ -127,9 +129,10 @@
             display: flex;
             align-items: flex-end;
             justify-content: flex-start;
-            min-height: calc(100vh-120px);
+            height: 100vh;
             padding-bottom: 15vh;
             padding-left: 80px;
+            overflow: hidden;
         }
 
         .home-content {
@@ -168,6 +171,9 @@
         /* About Page */
         #about {
             padding-top: 120px;
+            padding-bottom: 40px;
+            min-height: 100vh;
+            overflow-y: auto;
         }
 
         .about-content {
@@ -176,7 +182,6 @@
             text-align: left;
             background: rgba(30, 36, 51, 0.9);
             padding: 40px;
-            min-height: calc(100vh-120px);
             border-radius: 10px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 107, 74, 0.1);
@@ -196,6 +201,9 @@
         /* Privacy Page */
         #privacy {
             padding-top: 120px;
+            padding-bottom: 40px;
+            min-height: 100vh;
+            overflow-y: auto;
         }
 
         .privacy-content {
@@ -203,7 +211,6 @@
             margin: 0 auto;
             text-align: left;
             background: rgba(30, 36, 51, 0.9);
-            min-height: calc(100vh-120px);
             padding: 40px;
             border-radius: 10px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
@@ -219,10 +226,6 @@
             line-height: 1.8;
             color: rgba(255, 255, 255, 0.8);
             margin-bottom: 15px;
-        }
-
-        #privacy.page {
-            margin-top: 30px; /* ou o valor que quiseres */
         }
 
         .privacy-grid {
@@ -266,6 +269,8 @@
         #imputation {
             padding-top: 120px;
             padding-bottom: 50px;
+            min-height: 100vh;
+            overflow-y: auto;
         }
 
         .imputation-content {
