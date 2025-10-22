@@ -1841,23 +1841,30 @@
             for (let iter = 0; iter < maxIter; iter++) {
                 columns.forEach(targetCol => {
                     const otherCols = columns.filter(c => c !== targetCol);
-                    
+
                     // Simple linear regression for each column
-                    const trainData = result.filter(row => 
-                        originalData[result.indexOf(row)][targetCol] != null &&
-                        originalData[result.indexOf(row)][targetCol] !== ''
-                    );
-                    
-                    if (trainData.length > 0) {
-                        const missingRows = result.filter(row => {
-                            const origRow = originalData[result.indexOf(row)];
-                            return origRow[targetCol] == null || origRow[targetCol] === '';
-                        });
-                        
-                        missingRows.forEach(row => {
+                    // Build list of indices with non-missing values for this column
+                    const trainIndices = [];
+                    for (let i = 0; i < result.length; i++) {
+                        if (originalData[i][targetCol] != null && originalData[i][targetCol] !== '') {
+                            trainIndices.push(i);
+                        }
+                    }
+
+                    if (trainIndices.length > 0) {
+                        // Find indices with missing values for this column
+                        const missingIndices = [];
+                        for (let i = 0; i < result.length; i++) {
+                            if (originalData[i][targetCol] == null || originalData[i][targetCol] === '') {
+                                missingIndices.push(i);
+                            }
+                        }
+
+                        // Impute missing values
+                        missingIndices.forEach(idx => {
                             // Predict based on similar complete cases
-                            let prediction = trainData[Math.floor(random() * trainData.length)][targetCol];
-                            row[targetCol] = prediction;
+                            const randomTrainIdx = trainIndices[Math.floor(random() * trainIndices.length)];
+                            result[idx][targetCol] = result[randomTrainIdx][targetCol];
                         });
                     }
                 });
