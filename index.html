@@ -2211,57 +2211,136 @@
         }
 
         // Metrics calculation functions
-        function calculateR2(original, imputed) {
-            const flatOriginal = original.flat().filter(v => v !== null && !isNaN(v));
-            const flatImputed = imputed.flat().filter(v => v !== null && !isNaN(v));
+        // Calculate per column, only for missing values, then average across columns
+        function calculateR2(original, imputed, dataMissing) {
+            const numCols = original[0].length;
+            const colR2Values = [];
 
-            const mean = flatOriginal.reduce((a, b) => a + b, 0) / flatOriginal.length;
-            const ssTot = flatOriginal.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0);
-            const ssRes = flatOriginal.reduce((sum, val, i) => sum + Math.pow(val - flatImputed[i], 2), 0);
+            for (let col = 0; col < numCols; col++) {
+                const originalVals = [];
+                const imputedVals = [];
 
-            return 1 - (ssRes / ssTot);
-        }
+                // Only include values that were missing
+                for (let row = 0; row < original.length; row++) {
+                    if (dataMissing[row][col] === null || dataMissing[row][col] === undefined) {
+                        originalVals.push(original[row][col]);
+                        imputedVals.push(imputed[row][col]);
+                    }
+                }
 
-        function calculatePearson(original, imputed) {
-            const flatOriginal = original.flat().filter(v => v !== null && !isNaN(v));
-            const flatImputed = imputed.flat().filter(v => v !== null && !isNaN(v));
-
-            const n = flatOriginal.length;
-            const meanX = flatOriginal.reduce((a, b) => a + b, 0) / n;
-            const meanY = flatImputed.reduce((a, b) => a + b, 0) / n;
-
-            let num = 0, denX = 0, denY = 0;
-            for (let i = 0; i < n; i++) {
-                const dx = flatOriginal[i] - meanX;
-                const dy = flatImputed[i] - meanY;
-                num += dx * dy;
-                denX += dx * dx;
-                denY += dy * dy;
+                if (originalVals.length > 0) {
+                    const mean = originalVals.reduce((a, b) => a + b, 0) / originalVals.length;
+                    const ssTot = originalVals.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0);
+                    const ssRes = originalVals.reduce((sum, val, i) => sum + Math.pow(val - imputedVals[i], 2), 0);
+                    const r2 = 1 - (ssRes / ssTot);
+                    colR2Values.push(r2);
+                }
             }
 
-            return num / Math.sqrt(denX * denY);
+            return colR2Values.length > 0
+                ? colR2Values.reduce((a, b) => a + b, 0) / colR2Values.length
+                : 0;
         }
 
-        function calculateNRMSE(original, imputed) {
-            const flatOriginal = original.flat().filter(v => v !== null && !isNaN(v));
-            const flatImputed = imputed.flat().filter(v => v !== null && !isNaN(v));
+        function calculatePearson(original, imputed, dataMissing) {
+            const numCols = original[0].length;
+            const colPearsonValues = [];
 
-            const n = flatOriginal.length;
-            const mse = flatOriginal.reduce((sum, val, i) =>
-                sum + Math.pow(val - flatImputed[i], 2), 0) / n;
-            const rmse = Math.sqrt(mse);
+            for (let col = 0; col < numCols; col++) {
+                const originalVals = [];
+                const imputedVals = [];
 
-            const range = Math.max(...flatOriginal) - Math.min(...flatOriginal);
-            return rmse / range;
+                // Only include values that were missing
+                for (let row = 0; row < original.length; row++) {
+                    if (dataMissing[row][col] === null || dataMissing[row][col] === undefined) {
+                        originalVals.push(original[row][col]);
+                        imputedVals.push(imputed[row][col]);
+                    }
+                }
+
+                if (originalVals.length > 1) {
+                    const n = originalVals.length;
+                    const meanX = originalVals.reduce((a, b) => a + b, 0) / n;
+                    const meanY = imputedVals.reduce((a, b) => a + b, 0) / n;
+
+                    let num = 0, denX = 0, denY = 0;
+                    for (let i = 0; i < n; i++) {
+                        const dx = originalVals[i] - meanX;
+                        const dy = imputedVals[i] - meanY;
+                        num += dx * dy;
+                        denX += dx * dx;
+                        denY += dy * dy;
+                    }
+
+                    const pearson = num / Math.sqrt(denX * denY);
+                    colPearsonValues.push(pearson);
+                }
+            }
+
+            return colPearsonValues.length > 0
+                ? colPearsonValues.reduce((a, b) => a + b, 0) / colPearsonValues.length
+                : 0;
         }
 
-        function calculateMAE(original, imputed) {
-            const flatOriginal = original.flat().filter(v => v !== null && !isNaN(v));
-            const flatImputed = imputed.flat().filter(v => v !== null && !isNaN(v));
+        function calculateNRMSE(original, imputed, dataMissing) {
+            const numCols = original[0].length;
+            const colNRMSEValues = [];
 
-            const n = flatOriginal.length;
-            return flatOriginal.reduce((sum, val, i) =>
-                sum + Math.abs(val - flatImputed[i]), 0) / n;
+            for (let col = 0; col < numCols; col++) {
+                const originalVals = [];
+                const imputedVals = [];
+
+                // Only include values that were missing
+                for (let row = 0; row < original.length; row++) {
+                    if (dataMissing[row][col] === null || dataMissing[row][col] === undefined) {
+                        originalVals.push(original[row][col]);
+                        imputedVals.push(imputed[row][col]);
+                    }
+                }
+
+                if (originalVals.length > 0) {
+                    const n = originalVals.length;
+                    const mse = originalVals.reduce((sum, val, i) =>
+                        sum + Math.pow(val - imputedVals[i], 2), 0) / n;
+                    const rmse = Math.sqrt(mse);
+
+                    const range = Math.max(...originalVals) - Math.min(...originalVals);
+                    const nrmse = range > 0 ? rmse / range : 0;
+                    colNRMSEValues.push(nrmse);
+                }
+            }
+
+            return colNRMSEValues.length > 0
+                ? colNRMSEValues.reduce((a, b) => a + b, 0) / colNRMSEValues.length
+                : 0;
+        }
+
+        function calculateMAE(original, imputed, dataMissing) {
+            const numCols = original[0].length;
+            const colMAEValues = [];
+
+            for (let col = 0; col < numCols; col++) {
+                const originalVals = [];
+                const imputedVals = [];
+
+                // Only include values that were missing
+                for (let row = 0; row < original.length; row++) {
+                    if (dataMissing[row][col] === null || dataMissing[row][col] === undefined) {
+                        originalVals.push(original[row][col]);
+                        imputedVals.push(imputed[row][col]);
+                    }
+                }
+
+                if (originalVals.length > 0) {
+                    const mae = originalVals.reduce((sum, val, i) =>
+                        sum + Math.abs(val - imputedVals[i]), 0) / originalVals.length;
+                    colMAEValues.push(mae);
+                }
+            }
+
+            return colMAEValues.length > 0
+                ? colMAEValues.reduce((a, b) => a + b, 0) / colMAEValues.length
+                : 0;
         }
 
         // Main test execution function
@@ -2358,11 +2437,11 @@
                         // Convert back to array format
                         const imputedArray = imputedData.map(row => columnNames.map(col => row[col]));
 
-                        // Calculate metrics
-                        results[method].r2.push(calculateR2(testConfig.originalData, imputedArray));
-                        results[method].pearson.push(calculatePearson(testConfig.originalData, imputedArray));
-                        results[method].nrmse.push(calculateNRMSE(testConfig.originalData, imputedArray));
-                        results[method].mae.push(calculateMAE(testConfig.originalData, imputedArray));
+                        // Calculate metrics (only for values that were missing)
+                        results[method].r2.push(calculateR2(testConfig.originalData, imputedArray, dataMissing));
+                        results[method].pearson.push(calculatePearson(testConfig.originalData, imputedArray, dataMissing));
+                        results[method].nrmse.push(calculateNRMSE(testConfig.originalData, imputedArray, dataMissing));
+                        results[method].mae.push(calculateMAE(testConfig.originalData, imputedArray, dataMissing));
                         results[method].time.push(executionTime);
 
                         // Small delay to show progress
