@@ -275,6 +275,165 @@
           font-weight: bold;
         }
 
+        /* Test Methods Page */
+        #test-methods {
+            padding-top: 120px;
+            padding-bottom: 50px;
+            min-height: 100vh;
+            overflow-y: auto;
+        }
+
+        .test-methods-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(30, 36, 51, 0.9);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 107, 74, 0.1);
+        }
+
+        .test-methods-content h1 {
+            margin-bottom: 10px;
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .test-methods-content .subtitle-test {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .test-step {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .test-step.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .selection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .selection-card {
+            border: 2px solid rgba(255, 107, 74, 0.3);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 107, 74, 0.05);
+        }
+
+        .selection-card:hover {
+            border-color: #ff6b4a;
+            background: rgba(255, 107, 74, 0.15);
+            transform: translateY(-3px);
+        }
+
+        .selection-card.selected {
+            border-color: #ff6b4a;
+            background: rgba(255, 107, 74, 0.2);
+            box-shadow: 0 4px 12px rgba(255, 107, 74, 0.4);
+        }
+
+        .selection-card.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .selection-card.disabled:hover {
+            transform: none;
+            border-color: rgba(255, 107, 74, 0.3);
+        }
+
+        .selection-card h3 {
+            color: #ffffff;
+            margin-bottom: 8px;
+            font-size: 18px;
+        }
+
+        .selection-card p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .selection-label {
+            display: block;
+            color: #ff6b4a;
+            font-weight: 500;
+            margin: 20px 0 10px 0;
+            font-size: 16px;
+        }
+
+        .method-limit-warning {
+            background: rgba(255, 193, 7, 0.1);
+            border-left: 4px solid #ffc107;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 14px;
+        }
+
+        .results-container {
+            margin-top: 30px;
+        }
+
+        .results-table {
+            width: 100%;
+            margin: 20px 0;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .results-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .results-table th {
+            background: rgba(255, 107, 74, 0.3);
+            color: #ffffff;
+            padding: 12px;
+            text-align: center;
+            font-weight: 600;
+            border: 1px solid rgba(255, 107, 74, 0.2);
+        }
+
+        .results-table td {
+            padding: 10px;
+            text-align: center;
+            color: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .results-table .best-result {
+            background: rgba(76, 175, 80, 0.2);
+            font-weight: 600;
+        }
+
+        .chart-container {
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+        }
+
         /* Feedback Page */
         #feedback {
             padding-top: 120px;
@@ -860,6 +1019,142 @@
                         </div>
                         <button class="btn" onclick="downloadImputedData()">Download Imputed Dataset</button>
                         <button class="btn btn-secondary" onclick="resetImputation()">Start New Imputation</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TEST METHODS PAGE -->
+        <div id="test-methods" class="page">
+            <div class="test-methods-content">
+                <h1>Test Methods Comparison</h1>
+                <p class="subtitle-test">Compare imputation methods with controlled missing data patterns</p>
+
+                <!-- Step 1: Dataset Selection -->
+                <div class="test-step active" id="test-step-1">
+                    <h2 style="color: #ff6b4a; margin-bottom: 20px;">Step 1: Select Dataset</h2>
+
+                    <label class="selection-label">Dataset Type</label>
+                    <div class="selection-grid">
+                        <div class="selection-card selected" onclick="selectDatasetType('numeric')">
+                            <h3>Pure Numeric</h3>
+                            <p>1 dataset available</p>
+                        </div>
+                        <div class="selection-card disabled">
+                            <h3>Mixed</h3>
+                            <p>Coming soon</p>
+                        </div>
+                        <div class="selection-card disabled">
+                            <h3>Categorical</h3>
+                            <p>Coming soon</p>
+                        </div>
+                    </div>
+
+                    <label class="selection-label">Choose Dataset</label>
+                    <div class="selection-grid" id="dataset-options">
+                        <div class="selection-card" onclick="selectDataset('iris')" data-dataset="iris">
+                            <h3>IRIS</h3>
+                            <p>150 rows × 4 cols</p>
+                        </div>
+                    </div>
+
+                    <div class="button-group" style="margin-top: 30px;">
+                        <button class="btn" onclick="goToTestStep(2)" id="btn-step-1">Continue</button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Methods Selection -->
+                <div class="test-step" id="test-step-2">
+                    <h2 style="color: #ff6b4a; margin-bottom: 20px;">Step 2: Select Methods to Compare</h2>
+
+                    <div class="method-limit-warning">
+                        ⚠️ Select 2 or 3 methods to compare
+                    </div>
+
+                    <label class="selection-label">Available Methods</label>
+                    <div class="selection-grid">
+                        <div class="selection-card" onclick="toggleMethod('iscak')" data-method="iscak">
+                            <h3>ISCA-k</h3>
+                            <p>Adaptive k-NN</p>
+                        </div>
+                        <div class="selection-card" onclick="toggleMethod('knn')" data-method="knn">
+                            <h3>k-NN</h3>
+                            <p>Standard k-NN</p>
+                        </div>
+                        <div class="selection-card" onclick="toggleMethod('mice')" data-method="mice">
+                            <h3>MICE</h3>
+                            <p>Iterative Imputation</p>
+                        </div>
+                        <div class="selection-card" onclick="toggleMethod('missforest')" data-method="missforest">
+                            <h3>MissForest</h3>
+                            <p>Random Forest</p>
+                        </div>
+                    </div>
+
+                    <div class="button-group" style="margin-top: 30px;">
+                        <button class="btn btn-secondary" onclick="goToTestStep(1)">Back</button>
+                        <button class="btn" onclick="goToTestStep(3)" id="btn-step-2" disabled>Continue</button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Test Configuration -->
+                <div class="test-step" id="test-step-3">
+                    <h2 style="color: #ff6b4a; margin-bottom: 20px;">Step 3: Configure Test</h2>
+
+                    <label class="selection-label">Missing Rate</label>
+                    <div class="selection-grid">
+                        <div class="selection-card" onclick="selectMissingRate(10)" data-rate="10">
+                            <h3>10%</h3>
+                        </div>
+                        <div class="selection-card" onclick="selectMissingRate(20)" data-rate="20">
+                            <h3>20%</h3>
+                        </div>
+                        <div class="selection-card" onclick="selectMissingRate(30)" data-rate="30">
+                            <h3>30%</h3>
+                        </div>
+                        <div class="selection-card" onclick="selectMissingRate(40)" data-rate="40">
+                            <h3>40%</h3>
+                        </div>
+                    </div>
+
+                    <div id="params-container" style="margin-top: 30px;"></div>
+
+                    <div class="button-group" style="margin-top: 30px;">
+                        <button class="btn btn-secondary" onclick="goToTestStep(2)">Back</button>
+                        <button class="btn" onclick="startComparison()" id="btn-step-3" disabled>Start Comparison</button>
+                    </div>
+                </div>
+
+                <!-- Step 4: Running Tests -->
+                <div class="test-step" id="test-step-4">
+                    <div class="progress-container">
+                        <h2>Running Tests...</h2>
+                        <div class="spinner"></div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="test-progress-fill">0%</div>
+                        </div>
+                        <p id="test-progress-text">Preparing...</p>
+                    </div>
+                </div>
+
+                <!-- Step 5: Results -->
+                <div class="test-step" id="test-step-5">
+                    <h2 style="color: #ff6b4a; margin-bottom: 20px;">Results</h2>
+
+                    <div class="info-box" id="test-summary"></div>
+
+                    <div class="results-container">
+                        <h3 style="color: #ffffff; margin-bottom: 15px;">Metrics Comparison</h3>
+                        <div class="results-table" id="results-table-container"></div>
+
+                        <h3 style="color: #ffffff; margin: 30px 0 15px 0;">NRMSE Comparison</h3>
+                        <div class="chart-container">
+                            <canvas id="nrmse-chart" width="800" height="400"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="button-group" style="margin-top: 30px;">
+                        <button class="btn btn-secondary" onclick="resetTestMethods()">New Test</button>
                     </div>
                 </div>
             </div>
@@ -1695,6 +1990,508 @@
                 });
             }
         });
+
+        // ========================================
+        // TEST METHODS PAGE - JAVASCRIPT
+        // ========================================
+
+        // Global variables for Test Methods
+        let testConfig = {
+            dataset: null,
+            datasetName: '',
+            datasetType: 'numeric',
+            selectedMethods: [],
+            missingRate: null,
+            originalData: null,
+            methodParams: {}
+        };
+
+        // Navigation functions
+        function goToTestStep(stepNumber) {
+            document.querySelectorAll('.test-step').forEach(s => s.classList.remove('active'));
+            document.getElementById(`test-step-${stepNumber}`).classList.add('active');
+        }
+
+        function selectDatasetType(type) {
+            testConfig.datasetType = type;
+            document.querySelectorAll('[onclick*="selectDatasetType"]').forEach(card => {
+                card.classList.remove('selected');
+            });
+            event.target.closest('.selection-card').classList.add('selected');
+        }
+
+        async function selectDataset(name) {
+            document.querySelectorAll('[data-dataset]').forEach(card => {
+                card.classList.remove('selected');
+            });
+            event.target.closest('.selection-card').classList.add('selected');
+
+            testConfig.datasetName = name;
+
+            // Load dataset from JSON
+            try {
+                const response = await fetch(`datasets/${name}.json`);
+                const data = await response.json();
+                testConfig.dataset = data;
+                testConfig.originalData = JSON.parse(JSON.stringify(data.data));
+            } catch (error) {
+                alert(`Error loading dataset: ${error.message}`);
+            }
+        }
+
+        function toggleMethod(method) {
+            const card = event.target.closest('.selection-card');
+            const index = testConfig.selectedMethods.indexOf(method);
+
+            if (index > -1) {
+                testConfig.selectedMethods.splice(index, 1);
+                card.classList.remove('selected');
+            } else {
+                if (testConfig.selectedMethods.length >= 3) {
+                    alert('Maximum 3 methods allowed');
+                    return;
+                }
+                testConfig.selectedMethods.push(method);
+                card.classList.add('selected');
+            }
+
+            // Enable/disable continue button
+            const btn = document.getElementById('btn-step-2');
+            btn.disabled = testConfig.selectedMethods.length < 2;
+        }
+
+        function selectMissingRate(rate) {
+            document.querySelectorAll('[data-rate]').forEach(card => {
+                card.classList.remove('selected');
+            });
+            event.target.closest('.selection-card').classList.add('selected');
+
+            testConfig.missingRate = rate / 100;
+
+            // Show parameters form
+            showParametersForm();
+        }
+
+        function showParametersForm() {
+            const container = document.getElementById('params-container');
+            let html = '<h3 style="color: #ffffff; margin-bottom: 15px;">Method Parameters</h3>';
+
+            testConfig.selectedMethods.forEach(method => {
+                if (method === 'iscak') {
+                    html += `
+                        <div class="form-section">
+                            <label>ISCA-k Parameters</label>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                                <div>
+                                    <label style="font-size: 13px; color: rgba(255,255,255,0.8);">Min Friends</label>
+                                    <input type="number" id="iscak-min" value="3" min="1" max="50">
+                                </div>
+                                <div>
+                                    <label style="font-size: 13px; color: rgba(255,255,255,0.8);">Max Friends</label>
+                                    <input type="number" id="iscak-max" value="15" min="1" max="50">
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                } else if (method === 'knn') {
+                    html += `
+                        <div class="form-section">
+                            <label>k-NN Parameters</label>
+                            <input type="number" id="knn-k" value="5" min="1" max="50">
+                        </div>
+                    `;
+                } else if (method === 'mice') {
+                    html += `
+                        <div class="form-section">
+                            <label>MICE Parameters</label>
+                            <input type="number" id="mice-iter" value="10" min="1" max="50" placeholder="Max Iterations">
+                        </div>
+                    `;
+                } else if (method === 'missforest') {
+                    html += `
+                        <div class="form-section">
+                            <label>MissForest Parameters</label>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                                <div>
+                                    <label style="font-size: 13px; color: rgba(255,255,255,0.8);">Max Iterations</label>
+                                    <input type="number" id="missforest-iter" value="10" min="1" max="50">
+                                </div>
+                                <div>
+                                    <label style="font-size: 13px; color: rgba(255,255,255,0.8);">Num Trees</label>
+                                    <input type="number" id="missforest-trees" value="100" min="10" max="500">
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            container.innerHTML = html;
+
+            // Enable start button
+            document.getElementById('btn-step-3').disabled = false;
+        }
+
+        // MCAR - Missing Completely At Random
+        function introduceMCAR(data, missingRate, seed = 42) {
+            const result = JSON.parse(JSON.stringify(data));
+            const totalCells = result.length * result[0].length;
+            const numMissing = Math.floor(totalCells * missingRate);
+
+            // Seeded random number generator
+            let seedValue = seed;
+            const random = () => {
+                seedValue = (seedValue * 9301 + 49297) % 233280;
+                return seedValue / 233280;
+            };
+
+            // Randomly select cells to make missing
+            const missingPositions = new Set();
+            while (missingPositions.size < numMissing) {
+                const row = Math.floor(random() * result.length);
+                const col = Math.floor(random() * result[0].length);
+                missingPositions.add(`${row},${col}`);
+            }
+
+            // Apply missings
+            missingPositions.forEach(pos => {
+                const [row, col] = pos.split(',').map(Number);
+                result[row][col] = null;
+            });
+
+            return result;
+        }
+
+        // Metrics calculation functions
+        function calculateR2(original, imputed) {
+            const flatOriginal = original.flat().filter(v => v !== null && !isNaN(v));
+            const flatImputed = imputed.flat().filter(v => v !== null && !isNaN(v));
+
+            const mean = flatOriginal.reduce((a, b) => a + b, 0) / flatOriginal.length;
+            const ssTot = flatOriginal.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0);
+            const ssRes = flatOriginal.reduce((sum, val, i) => sum + Math.pow(val - flatImputed[i], 2), 0);
+
+            return 1 - (ssRes / ssTot);
+        }
+
+        function calculatePearson(original, imputed) {
+            const flatOriginal = original.flat().filter(v => v !== null && !isNaN(v));
+            const flatImputed = imputed.flat().filter(v => v !== null && !isNaN(v));
+
+            const n = flatOriginal.length;
+            const meanX = flatOriginal.reduce((a, b) => a + b, 0) / n;
+            const meanY = flatImputed.reduce((a, b) => a + b, 0) / n;
+
+            let num = 0, denX = 0, denY = 0;
+            for (let i = 0; i < n; i++) {
+                const dx = flatOriginal[i] - meanX;
+                const dy = flatImputed[i] - meanY;
+                num += dx * dy;
+                denX += dx * dx;
+                denY += dy * dy;
+            }
+
+            return num / Math.sqrt(denX * denY);
+        }
+
+        function calculateNRMSE(original, imputed) {
+            const flatOriginal = original.flat().filter(v => v !== null && !isNaN(v));
+            const flatImputed = imputed.flat().filter(v => v !== null && !isNaN(v));
+
+            const n = flatOriginal.length;
+            const mse = flatOriginal.reduce((sum, val, i) =>
+                sum + Math.pow(val - flatImputed[i], 2), 0) / n;
+            const rmse = Math.sqrt(mse);
+
+            const range = Math.max(...flatOriginal) - Math.min(...flatOriginal);
+            return rmse / range;
+        }
+
+        function calculateMAE(original, imputed) {
+            const flatOriginal = original.flat().filter(v => v !== null && !isNaN(v));
+            const flatImputed = imputed.flat().filter(v => v !== null && !isNaN(v));
+
+            const n = flatOriginal.length;
+            return flatOriginal.reduce((sum, val, i) =>
+                sum + Math.abs(val - flatImputed[i]), 0) / n;
+        }
+
+        // Main test execution function
+        async function startComparison() {
+            goToTestStep(4);
+
+            const progressFill = document.getElementById('test-progress-fill');
+            const progressText = document.getElementById('test-progress-text');
+
+            try {
+                const results = {};
+                const N_RUNS = 3;
+                let totalSteps = testConfig.selectedMethods.length * N_RUNS;
+                let currentStep = 0;
+
+                // Run tests for each method
+                for (const method of testConfig.selectedMethods) {
+                    results[method] = {
+                        r2: [],
+                        pearson: [],
+                        nrmse: [],
+                        mae: [],
+                        time: []
+                    };
+
+                    for (let run = 0; run < N_RUNS; run++) {
+                        currentStep++;
+                        const progress = (currentStep / totalSteps) * 100;
+                        progressFill.style.width = progress + '%';
+                        progressFill.textContent = Math.round(progress) + '%';
+                        progressText.textContent = `Testing ${method.toUpperCase()} - Run ${run + 1}/${N_RUNS}...`;
+
+                        // Introduce MCAR with different seed for each run
+                        const dataMissing = introduceMCAR(testConfig.originalData, testConfig.missingRate, 42 + run);
+
+                        // Convert to object format for imputation functions
+                        const columnNames = testConfig.dataset.column_names;
+                        const dataObj = dataMissing.map(row => {
+                            const obj = {};
+                            row.forEach((val, idx) => {
+                                obj[columnNames[idx]] = val;
+                            });
+                            return obj;
+                        });
+
+                        // Perform imputation
+                        const startTime = performance.now();
+                        let imputedData;
+
+                        if (method === 'iscak') {
+                            imputedData = await imputeISCAk(dataObj);
+                        } else if (method === 'knn') {
+                            const k = parseInt(document.getElementById('knn-k')?.value || 5);
+                            imputedData = knnImputation(dataObj, k);
+                        } else if (method === 'mice') {
+                            const maxIter = parseInt(document.getElementById('mice-iter')?.value || 10);
+                            imputedData = miceImputation(dataObj, maxIter, 42 + run);
+                        } else if (method === 'missforest') {
+                            const maxIter = parseInt(document.getElementById('missforest-iter')?.value || 10);
+                            const numTrees = parseInt(document.getElementById('missforest-trees')?.value || 100);
+                            imputedData = missForestImputation(dataObj, maxIter, numTrees, 42 + run);
+                        }
+
+                        const endTime = performance.now();
+                        const executionTime = (endTime - startTime) / 1000;
+
+                        // Convert back to array format
+                        const imputedArray = imputedData.map(row => columnNames.map(col => row[col]));
+
+                        // Calculate metrics
+                        results[method].r2.push(calculateR2(testConfig.originalData, imputedArray));
+                        results[method].pearson.push(calculatePearson(testConfig.originalData, imputedArray));
+                        results[method].nrmse.push(calculateNRMSE(testConfig.originalData, imputedArray));
+                        results[method].mae.push(calculateMAE(testConfig.originalData, imputedArray));
+                        results[method].time.push(executionTime);
+
+                        // Small delay to show progress
+                        await new Promise(resolve => setTimeout(resolve, 100));
+                    }
+                }
+
+                // Calculate averages
+                const avgResults = {};
+                for (const method of testConfig.selectedMethods) {
+                    avgResults[method] = {
+                        r2: results[method].r2.reduce((a, b) => a + b, 0) / N_RUNS,
+                        pearson: results[method].pearson.reduce((a, b) => a + b, 0) / N_RUNS,
+                        nrmse: results[method].nrmse.reduce((a, b) => a + b, 0) / N_RUNS,
+                        mae: results[method].mae.reduce((a, b) => a + b, 0) / N_RUNS,
+                        time: results[method].time.reduce((a, b) => a + b, 0) / N_RUNS
+                    };
+                }
+
+                // Display results
+                displayResults(avgResults);
+                goToTestStep(5);
+
+            } catch (error) {
+                console.error('Test error:', error);
+                progressText.innerHTML = `
+                    <div class="error-box">
+                        <strong>Error:</strong> ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function imputeISCAk(data) {
+            const csvString = Papa.unparse(data);
+            const minFriends = parseInt(document.getElementById('iscak-min')?.value || 3);
+            const maxFriends = parseInt(document.getElementById('iscak-max')?.value || 15);
+
+            const response = await fetch(`${API_URL}/impute`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    csv_data: csvString,
+                    min_friends: minFriends,
+                    max_friends: maxFriends,
+                    mi_neighbors: 3,
+                    max_cycles: 3,
+                    categorical_threshold: 10
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error('ISCA-k API request failed');
+            }
+
+            const result = await response.json();
+            return Papa.parse(result.csv_data, { header: true, dynamicTyping: true }).data;
+        }
+
+        function displayResults(results) {
+            // Summary
+            document.getElementById('test-summary').innerHTML = `
+                <p><strong>Dataset:</strong> ${testConfig.datasetName.toUpperCase()}</p>
+                <p><strong>Missing Rate:</strong> ${(testConfig.missingRate * 100)}%</p>
+                <p><strong>Pattern:</strong> MCAR (Missing Completely At Random)</p>
+                <p><strong>Methods Compared:</strong> ${testConfig.selectedMethods.map(m => m.toUpperCase()).join(', ')}</p>
+                <p><strong>Runs:</strong> 3 (averaged)</p>
+            `;
+
+            // Results table
+            let tableHTML = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>R²</th>
+                            <th>Pearson</th>
+                            <th>NRMSE</th>
+                            <th>MAE</th>
+                            <th>Time (s)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            // Find best NRMSE (lowest)
+            let bestNRMSE = Infinity;
+            let bestMethod = '';
+            for (const method of testConfig.selectedMethods) {
+                if (results[method].nrmse < bestNRMSE) {
+                    bestNRMSE = results[method].nrmse;
+                    bestMethod = method;
+                }
+            }
+
+            for (const method of testConfig.selectedMethods) {
+                const r = results[method];
+                const isBest = method === bestMethod ? ' class="best-result"' : '';
+                tableHTML += `
+                    <tr${isBest}>
+                        <td><strong>${method.toUpperCase()}</strong></td>
+                        <td>${r.r2.toFixed(3)}</td>
+                        <td>${r.pearson.toFixed(3)}</td>
+                        <td>${r.nrmse.toFixed(4)}</td>
+                        <td>${r.mae.toFixed(4)}</td>
+                        <td>${r.time.toFixed(2)}</td>
+                    </tr>
+                `;
+            }
+
+            tableHTML += '</tbody></table>';
+            document.getElementById('results-table-container').innerHTML = tableHTML;
+
+            // Draw NRMSE chart
+            drawNRMSEChart(results);
+        }
+
+        function drawNRMSEChart(results) {
+            const canvas = document.getElementById('nrmse-chart');
+            const ctx = canvas.getContext('2d');
+
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const methods = testConfig.selectedMethods;
+            const nrmseValues = methods.map(m => results[m].nrmse);
+
+            // Chart settings
+            const padding = 60;
+            const chartWidth = canvas.width - padding * 2;
+            const chartHeight = canvas.height - padding * 2;
+            const barWidth = chartWidth / methods.length - 20;
+            const maxValue = Math.max(...nrmseValues) * 1.2;
+
+            // Draw axes
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(padding, padding);
+            ctx.lineTo(padding, canvas.height - padding);
+            ctx.lineTo(canvas.width - padding, canvas.height - padding);
+            ctx.stroke();
+
+            // Draw bars
+            const colors = {
+                'iscak': '#2E86AB',
+                'knn': '#A23B72',
+                'mice': '#F18F01',
+                'missforest': '#C73E1D'
+            };
+
+            methods.forEach((method, i) => {
+                const barHeight = (nrmseValues[i] / maxValue) * chartHeight;
+                const x = padding + (i * (chartWidth / methods.length)) + 20;
+                const y = canvas.height - padding - barHeight;
+
+                // Draw bar
+                ctx.fillStyle = colors[method] || '#ff6b4a';
+                ctx.fillRect(x, y, barWidth, barHeight);
+
+                // Draw value on top
+                ctx.fillStyle = '#ffffff';
+                ctx.font = '14px Exo';
+                ctx.textAlign = 'center';
+                ctx.fillText(nrmseValues[i].toFixed(4), x + barWidth / 2, y - 5);
+
+                // Draw label
+                ctx.fillText(method.toUpperCase(), x + barWidth / 2, canvas.height - padding + 25);
+            });
+
+            // Y-axis label
+            ctx.save();
+            ctx.translate(20, canvas.height / 2);
+            ctx.rotate(-Math.PI / 2);
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '16px Exo';
+            ctx.textAlign = 'center';
+            ctx.fillText('NRMSE', 0, 0);
+            ctx.restore();
+
+            // Title
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 18px Exo';
+            ctx.textAlign = 'center';
+            ctx.fillText('NRMSE Comparison (Lower is Better)', canvas.width / 2, 30);
+        }
+
+        function resetTestMethods() {
+            testConfig = {
+                dataset: null,
+                datasetName: '',
+                datasetType: 'numeric',
+                selectedMethods: [],
+                missingRate: null,
+                originalData: null,
+                methodParams: {}
+            };
+
+            document.querySelectorAll('.selection-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+
+            goToTestStep(1);
+        }
     </script>
 </body>
 </html>
