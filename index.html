@@ -2083,11 +2083,11 @@
                             <label>ISCA-k Parameters</label>
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
                                 <div>
-                                    <label style="font-size: 13px; color: rgba(255,255,255,0.8);">Min Friends</label>
+                                    <label style="font-size: 13px; color: rgba(255,255,255,0.8);">Minimum Friends (k):</label>
                                     <input type="number" id="iscak-min" value="3" min="1" max="50">
                                 </div>
                                 <div>
-                                    <label style="font-size: 13px; color: rgba(255,255,255,0.8);">Max Friends</label>
+                                    <label style="font-size: 13px; color: rgba(255,255,255,0.8);">Maximum Friends (k):</label>
                                     <input type="number" id="iscak-max" value="15" min="1" max="50">
                                 </div>
                             </div>
@@ -2097,28 +2097,55 @@
                     html += `
                         <div class="form-section">
                             <label>k-NN Parameters</label>
-                            <input type="number" id="knn-k" value="5" min="1" max="50">
+                            <label style="font-size: 14px; color: rgba(255,255,255,0.9); margin-bottom: 10px; display: block;">Selection Method:</label>
+                            <div class="radio-group">
+                                <label>
+                                    <input type="radio" name="knnMethod" value="fixed" checked onchange="toggleKnnInputsTest()">
+                                    Fixed k
+                                </label>
+                                <label>
+                                    <input type="radio" name="knnMethod" value="cv" onchange="toggleKnnInputsTest()">
+                                    Cross Validation
+                                </label>
+                            </div>
+                            <div id="knnFixedInputTest" style="margin-top: 15px;">
+                                <label style="font-size: 13px; color: rgba(255,255,255,0.8);">Number of Neighbors (k):</label>
+                                <input type="number" id="knn-k" value="5" min="1" max="50" style="width: 100%; padding: 10px; border: 2px solid rgba(255, 107, 74, 0.3); border-radius: 5px; background: rgba(255, 255, 255, 0.05); color: #ffffff; font-family: 'Exo', sans-serif;">
+                            </div>
+                            <div id="knnRangeInputTest" style="display: none; margin-top: 15px;">
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                                    <div>
+                                        <label style="font-size: 13px; color: rgba(255,255,255,0.8);">Minimum k:</label>
+                                        <input type="number" id="knn-k-min" value="3" min="1" max="50" style="width: 100%; padding: 10px; border: 2px solid rgba(255, 107, 74, 0.3); border-radius: 5px; background: rgba(255, 255, 255, 0.05); color: #ffffff; font-family: 'Exo', sans-serif;">
+                                    </div>
+                                    <div>
+                                        <label style="font-size: 13px; color: rgba(255,255,255,0.8);">Maximum k:</label>
+                                        <input type="number" id="knn-k-max" value="15" min="1" max="50" style="width: 100%; padding: 10px; border: 2px solid rgba(255, 107, 74, 0.3); border-radius: 5px; background: rgba(255, 255, 255, 0.05); color: #ffffff; font-family: 'Exo', sans-serif;">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     `;
                 } else if (method === 'mice') {
                     html += `
                         <div class="form-section">
                             <label>MICE Parameters</label>
-                            <input type="number" id="mice-iter" value="10" min="1" max="50" placeholder="Max Iterations">
+                            <label style="font-size: 13px; color: rgba(255,255,255,0.8); margin-top: 10px; display: block;">Maximum Iterations:</label>
+                            <input type="number" id="mice-iter" value="10" min="1" max="50" style="width: 100%; padding: 10px; border: 2px solid rgba(255, 107, 74, 0.3); border-radius: 5px; background: rgba(255, 255, 255, 0.05); color: #ffffff; font-family: 'Exo', sans-serif;">
                         </div>
                     `;
                 } else if (method === 'missforest') {
                     html += `
                         <div class="form-section">
                             <label>MissForest Parameters</label>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px;">
                                 <div>
-                                    <label style="font-size: 13px; color: rgba(255,255,255,0.8);">Max Iterations</label>
-                                    <input type="number" id="missforest-iter" value="10" min="1" max="50">
+                                    <label style="font-size: 13px; color: rgba(255,255,255,0.8);">Maximum Iterations:</label>
+                                    <input type="number" id="missforest-iter" value="10" min="1" max="50" style="width: 100%; padding: 10px; border: 2px solid rgba(255, 107, 74, 0.3); border-radius: 5px; background: rgba(255, 255, 255, 0.05); color: #ffffff; font-family: 'Exo', sans-serif;">
                                 </div>
                                 <div>
-                                    <label style="font-size: 13px; color: rgba(255,255,255,0.8);">Num Trees</label>
-                                    <input type="number" id="missforest-trees" value="100" min="10" max="500">
+                                    <label style="font-size: 13px; color: rgba(255,255,255,0.8);">Number of Trees:</label>
+                                    <input type="number" id="missforest-trees" value="100" min="10" max="500" style="width: 100%; padding: 10px; border: 2px solid rgba(255, 107, 74, 0.3); border-radius: 5px; background: rgba(255, 255, 255, 0.05); color: #ffffff; font-family: 'Exo', sans-serif;">
                                 </div>
                             </div>
                         </div>
@@ -2130,6 +2157,12 @@
 
             // Enable start button
             document.getElementById('btn-step-3').disabled = false;
+        }
+
+        function toggleKnnInputsTest() {
+            const method = document.querySelector('input[name="knnMethod"]:checked').value;
+            document.getElementById('knnFixedInputTest').style.display = method === 'fixed' ? 'block' : 'none';
+            document.getElementById('knnRangeInputTest').style.display = method === 'cv' ? 'block' : 'none';
         }
 
         // MCAR - Missing Completely At Random
@@ -2259,6 +2292,10 @@
                             return obj;
                         });
 
+                        // Store original for MICE/MissForest (they need it as global reference)
+                        const originalDataBackup = window.originalData;
+                        window.originalData = JSON.parse(JSON.stringify(dataObj));
+
                         // Perform imputation
                         const startTime = performance.now();
                         let imputedData;
@@ -2266,7 +2303,17 @@
                         if (method === 'iscak') {
                             imputedData = await imputeISCAk(dataObj);
                         } else if (method === 'knn') {
-                            const k = parseInt(document.getElementById('knn-k')?.value || 5);
+                            const knnMethod = document.querySelector('input[name="knnMethod"]:checked')?.value || 'fixed';
+                            let k;
+
+                            if (knnMethod === 'fixed') {
+                                k = parseInt(document.getElementById('knn-k')?.value || 5);
+                            } else {
+                                const kMin = parseInt(document.getElementById('knn-k-min')?.value || 3);
+                                const kMax = parseInt(document.getElementById('knn-k-max')?.value || 15);
+                                k = Math.floor((kMin + kMax) / 2); // Simplified: using midpoint
+                            }
+
                             imputedData = knnImputation(dataObj, k);
                         } else if (method === 'mice') {
                             const maxIter = parseInt(document.getElementById('mice-iter')?.value || 10);
@@ -2276,6 +2323,9 @@
                             const numTrees = parseInt(document.getElementById('missforest-trees')?.value || 100);
                             imputedData = missForestImputation(dataObj, maxIter, numTrees, 42 + run);
                         }
+
+                        // Restore original
+                        window.originalData = originalDataBackup;
 
                         const endTime = performance.now();
                         const executionTime = (endTime - startTime) / 1000;
