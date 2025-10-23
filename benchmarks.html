@@ -339,20 +339,24 @@
                     <h3>ISCA-k Parameters</h3>
                     <div class="param-grid">
                         <div class="form-group">
-                            <label for="iscak-min-friends">Min Friends:</label>
-                            <input type="number" id="iscak-min-friends" value="3" min="1" max="20">
+                            <label for="minFriends">Minimum Friends (k):</label>
+                            <input type="number" id="minFriends" value="3" min="1" max="50">
                         </div>
                         <div class="form-group">
-                            <label for="iscak-max-friends">Max Friends:</label>
-                            <input type="number" id="iscak-max-friends" value="15" min="1" max="50">
+                            <label for="maxFriends">Maximum Friends (k):</label>
+                            <input type="number" id="maxFriends" value="15" min="1" max="50">
                         </div>
                         <div class="form-group">
-                            <label for="iscak-mi-neighbors">MI Neighbors:</label>
-                            <input type="number" id="iscak-mi-neighbors" value="3" min="1" max="10">
+                            <label for="miNeighbors">MI Neighbors:</label>
+                            <input type="number" id="miNeighbors" value="3" min="1" max="10">
                         </div>
                         <div class="form-group">
-                            <label for="iscak-max-cycles">Max Cycles:</label>
-                            <input type="number" id="iscak-max-cycles" value="3" min="1" max="10">
+                            <label for="maxCycles">Maximum Cycles:</label>
+                            <input type="number" id="maxCycles" value="3" min="1" max="10">
+                        </div>
+                        <div class="form-group">
+                            <label for="categoricalThreshold">Categorical Threshold:</label>
+                            <input type="number" id="categoricalThreshold" value="10" min="2" max="50">
                         </div>
                     </div>
                 </div>
@@ -362,8 +366,8 @@
                     <h3>kNN Parameters</h3>
                     <div class="param-grid">
                         <div class="form-group">
-                            <label for="knn-k">k (Neighbors):</label>
-                            <input type="number" id="knn-k" value="5" min="1" max="20">
+                            <label for="kValue">Number of Neighbors (k):</label>
+                            <input type="number" id="kValue" value="5" min="1" max="50">
                         </div>
                     </div>
                 </div>
@@ -373,8 +377,12 @@
                     <h3>MICE Parameters</h3>
                     <div class="param-grid">
                         <div class="form-group">
-                            <label for="mice-max-iter">Max Iterations:</label>
-                            <input type="number" id="mice-max-iter" value="10" min="1" max="50">
+                            <label for="maxIterations">Maximum Iterations:</label>
+                            <input type="number" id="maxIterations" value="10" min="1" max="100">
+                        </div>
+                        <div class="form-group">
+                            <label for="seed">Random Seed:</label>
+                            <input type="number" id="seed" value="42" min="0">
                         </div>
                     </div>
                 </div>
@@ -384,12 +392,16 @@
                     <h3>MissForest Parameters</h3>
                     <div class="param-grid">
                         <div class="form-group">
-                            <label for="missforest-n-estimators">N Estimators:</label>
-                            <input type="number" id="missforest-n-estimators" value="10" min="5" max="100">
+                            <label for="maxIterationsMF">Maximum Iterations:</label>
+                            <input type="number" id="maxIterationsMF" value="10" min="1" max="100">
                         </div>
                         <div class="form-group">
-                            <label for="missforest-max-iter">Max Iterations:</label>
-                            <input type="number" id="missforest-max-iter" value="10" min="1" max="50">
+                            <label for="numTrees">Number of Trees:</label>
+                            <input type="number" id="numTrees" value="100" min="10" max="500">
+                        </div>
+                        <div class="form-group">
+                            <label for="seedMF">Random Seed:</label>
+                            <input type="number" id="seedMF" value="42" min="0">
                         </div>
                     </div>
                 </div>
@@ -486,23 +498,26 @@
         function getMethodParams(method) {
             if (method === 'iscak') {
                 return {
-                    min_friends: parseInt(document.getElementById('iscak-min-friends').value),
-                    max_friends: parseInt(document.getElementById('iscak-max-friends').value),
-                    mi_neighbors: parseInt(document.getElementById('iscak-mi-neighbors').value),
-                    max_cycles: parseInt(document.getElementById('iscak-max-cycles').value)
+                    min_friends: parseInt(document.getElementById('minFriends').value),
+                    max_friends: parseInt(document.getElementById('maxFriends').value),
+                    mi_neighbors: parseInt(document.getElementById('miNeighbors').value),
+                    max_cycles: parseInt(document.getElementById('maxCycles').value),
+                    categorical_threshold: parseInt(document.getElementById('categoricalThreshold').value)
                 };
             } else if (method === 'knn') {
                 return {
-                    k: parseInt(document.getElementById('knn-k').value)
+                    k: parseInt(document.getElementById('kValue').value)
                 };
             } else if (method === 'mice') {
                 return {
-                    max_iter: parseInt(document.getElementById('mice-max-iter').value)
+                    max_iter: parseInt(document.getElementById('maxIterations').value),
+                    random_state: parseInt(document.getElementById('seed').value)
                 };
             } else if (method === 'missforest') {
                 return {
-                    n_estimators: parseInt(document.getElementById('missforest-n-estimators').value),
-                    max_iter: parseInt(document.getElementById('missforest-max-iter').value)
+                    n_estimators: parseInt(document.getElementById('numTrees').value),
+                    max_iter: parseInt(document.getElementById('maxIterationsMF').value),
+                    random_state: parseInt(document.getElementById('seedMF').value)
                 };
             }
             return {};
