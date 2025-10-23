@@ -1304,13 +1304,16 @@
 
         function startImputation() {
             showStep('step-processing');
-            
+
+            // Todos os métodos agora usam a API
             if (selectedMethod === 'iscak') {
-                // ISCA-k usa a API
                 performISCAkImputation();
-            } else {
-                // Outros métodos usam processamento local
-                performLocalImputation();
+            } else if (selectedMethod === 'knn') {
+                performKNNImputation();
+            } else if (selectedMethod === 'mice') {
+                performMICEImputation();
+            } else if (selectedMethod === 'missforest') {
+                performMissForestImputation();
             }
         }
 
@@ -1384,6 +1387,261 @@
                 
             } catch (error) {
                 console.error('ISCA-k imputation error:', error);
+                progressText.innerHTML = `
+                    <div class="error-box">
+                        <strong>Error:</strong> ${error.message}
+                        <br><br>
+                        Please check:
+                        <ul style="text-align: left; margin-top: 10px;">
+                            <li>API URL is correctly configured</li>
+                            <li>API is running and accessible</li>
+                            <li>Your internet connection</li>
+                        </ul>
+                    </div>
+                `;
+                progressFill.style.width = '0%';
+                progressFill.textContent = '';
+            }
+        }
+
+        async function performKNNImputation() {
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+
+            try {
+                progressText.textContent = 'Connecting to API...';
+                progressFill.style.width = '10%';
+                progressFill.textContent = '10%';
+
+                // Prepara os dados
+                const csvString = Papa.unparse(currentData);
+
+                const knnMethod = document.querySelector('input[name="knnMethod"]:checked')?.value || 'fixed';
+                let k;
+
+                if (knnMethod === 'fixed') {
+                    k = parseInt(document.getElementById('kValue')?.value || 5);
+                } else {
+                    const kMin = parseInt(document.getElementById('kMin')?.value || 3);
+                    const kMax = parseInt(document.getElementById('kMax')?.value || 15);
+                    k = Math.floor((kMin + kMax) / 2);
+                }
+
+                const params = {
+                    csv_data: csvString,
+                    k: k
+                };
+
+                progressText.textContent = 'Sending data to server...';
+                progressFill.style.width = '20%';
+                progressFill.textContent = '20%';
+
+                // Chama a API
+                const response = await fetch(`${API_URL}/impute/knn`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(params)
+                });
+
+                progressFill.style.width = '80%';
+                progressFill.textContent = '80%';
+                progressText.textContent = 'Processing kNN imputation...';
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'kNN API request failed');
+                }
+
+                const result = await response.json();
+
+                progressFill.style.width = '100%';
+                progressFill.textContent = '100%';
+                progressText.textContent = 'Complete!';
+
+                // Parse resultado
+                imputedData = Papa.parse(result.csv_data, { header: true, dynamicTyping: true }).data;
+
+                // Mostra estatísticas
+                const stats = result.stats || {};
+                document.getElementById('completionInfo').innerHTML = `
+                    <p>Method: <strong>k-NN</strong></p>
+                    <p>Original missing values: <strong>${stats.initial_missing || missingCount}</strong></p>
+                    <p>Final missing values: <strong>${stats.final_missing || 0}</strong></p>
+                    <p>k (neighbors): <strong>${stats.k || k}</strong></p>
+                `;
+
+                setTimeout(() => {
+                    showStep('step-complete');
+                }, 500);
+
+            } catch (error) {
+                console.error('kNN imputation error:', error);
+                progressText.innerHTML = `
+                    <div class="error-box">
+                        <strong>Error:</strong> ${error.message}
+                        <br><br>
+                        Please check:
+                        <ul style="text-align: left; margin-top: 10px;">
+                            <li>API URL is correctly configured</li>
+                            <li>API is running and accessible</li>
+                            <li>Your internet connection</li>
+                        </ul>
+                    </div>
+                `;
+                progressFill.style.width = '0%';
+                progressFill.textContent = '';
+            }
+        }
+
+        async function performMICEImputation() {
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+
+            try {
+                progressText.textContent = 'Connecting to API...';
+                progressFill.style.width = '10%';
+                progressFill.textContent = '10%';
+
+                // Prepara os dados
+                const csvString = Papa.unparse(currentData);
+
+                const params = {
+                    csv_data: csvString,
+                    max_iter: parseInt(document.getElementById('maxIterations')?.value || 10),
+                    random_state: parseInt(document.getElementById('seed')?.value || 42)
+                };
+
+                progressText.textContent = 'Sending data to server...';
+                progressFill.style.width = '20%';
+                progressFill.textContent = '20%';
+
+                // Chama a API
+                const response = await fetch(`${API_URL}/impute/mice`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(params)
+                });
+
+                progressFill.style.width = '80%';
+                progressFill.textContent = '80%';
+                progressText.textContent = 'Processing MICE imputation...';
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'MICE API request failed');
+                }
+
+                const result = await response.json();
+
+                progressFill.style.width = '100%';
+                progressFill.textContent = '100%';
+                progressText.textContent = 'Complete!';
+
+                // Parse resultado
+                imputedData = Papa.parse(result.csv_data, { header: true, dynamicTyping: true }).data;
+
+                // Mostra estatísticas
+                const stats = result.stats || {};
+                document.getElementById('completionInfo').innerHTML = `
+                    <p>Method: <strong>MICE</strong></p>
+                    <p>Original missing values: <strong>${stats.initial_missing || missingCount}</strong></p>
+                    <p>Final missing values: <strong>${stats.final_missing || 0}</strong></p>
+                    <p>Max iterations: <strong>${stats.max_iter || params.max_iter}</strong></p>
+                `;
+
+                setTimeout(() => {
+                    showStep('step-complete');
+                }, 500);
+
+            } catch (error) {
+                console.error('MICE imputation error:', error);
+                progressText.innerHTML = `
+                    <div class="error-box">
+                        <strong>Error:</strong> ${error.message}
+                        <br><br>
+                        Please check:
+                        <ul style="text-align: left; margin-top: 10px;">
+                            <li>API URL is correctly configured</li>
+                            <li>API is running and accessible</li>
+                            <li>Your internet connection</li>
+                        </ul>
+                    </div>
+                `;
+                progressFill.style.width = '0%';
+                progressFill.textContent = '';
+            }
+        }
+
+        async function performMissForestImputation() {
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+
+            try {
+                progressText.textContent = 'Connecting to API...';
+                progressFill.style.width = '10%';
+                progressFill.textContent = '10%';
+
+                // Prepara os dados
+                const csvString = Papa.unparse(currentData);
+
+                const params = {
+                    csv_data: csvString,
+                    n_estimators: parseInt(document.getElementById('numTrees')?.value || 10),
+                    max_iter: parseInt(document.getElementById('maxIterations')?.value || 10),
+                    random_state: parseInt(document.getElementById('seed')?.value || 42)
+                };
+
+                progressText.textContent = 'Sending data to server...';
+                progressFill.style.width = '20%';
+                progressFill.textContent = '20%';
+
+                // Chama a API
+                const response = await fetch(`${API_URL}/impute/missforest`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(params)
+                });
+
+                progressFill.style.width = '80%';
+                progressFill.textContent = '80%';
+                progressText.textContent = 'Processing MissForest imputation...';
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.detail || 'MissForest API request failed');
+                }
+
+                const result = await response.json();
+
+                progressFill.style.width = '100%';
+                progressFill.textContent = '100%';
+                progressText.textContent = 'Complete!';
+
+                // Parse resultado
+                imputedData = Papa.parse(result.csv_data, { header: true, dynamicTyping: true }).data;
+
+                // Mostra estatísticas
+                const stats = result.stats || {};
+                document.getElementById('completionInfo').innerHTML = `
+                    <p>Method: <strong>MissForest</strong></p>
+                    <p>Original missing values: <strong>${stats.initial_missing || missingCount}</strong></p>
+                    <p>Final missing values: <strong>${stats.final_missing || 0}</strong></p>
+                    <p>Number of trees: <strong>${stats.n_estimators || params.n_estimators}</strong></p>
+                    <p>Max iterations: <strong>${stats.max_iter || params.max_iter}</strong></p>
+                `;
+
+                setTimeout(() => {
+                    showStep('step-complete');
+                }, 500);
+
+            } catch (error) {
+                console.error('MissForest imputation error:', error);
                 progressText.innerHTML = `
                     <div class="error-box">
                         <strong>Error:</strong> ${error.message}
