@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ISCA-k - Benchmarks</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Exo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Exo', sans-serif;
+            background: #011136;
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 30px;
+            right: 50px;
+            z-index: 1000;
+            display: flex;
+            gap: 0;
+            align-items: center;
+            background: linear-gradient(to left, rgba(1, 17, 54, 0.95) 0%, rgba(1, 17, 54, 0.85) 70%, transparent 100%);
+            padding: 5px 20px 5px 40px;
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+        }
+
+        nav button {
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            padding: 10px 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 400;
+            transition: all 0.3s ease;
+        }
+
+        nav button:hover {
+            color: #ff6b35;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff6b35;
+            margin-bottom: 40px;
+            font-size: 2.5rem;
+        }
+
+        .wizard {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .wizard-step {
+            display: none;
+        }
+
+        .wizard-step.active {
+            display: block;
+        }
+
+        .step-title {
+            font-size: 1.5rem;
+            color: #ff6b35;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group select,
+        .form-group input[type="range"],
+        .form-group input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #ffffff;
+            font-family: 'Exo', sans-serif;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .method-params {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+        }
+
+        .method-params.active {
+            display: block;
+        }
+
+        .range-value {
+            display: inline-block;
+            margin-left: 10px;
+            font-weight: 600;
+            color: #ff6b35;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-family: 'Exo', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff6b35, #ff8d33);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Results */
+        .results-container {
+            display: none;
+            margin-top: 40px;
+        }
+
+        .results-container.active {
+            display: block;
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .results-table th,
+        .results-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .results-table th {
+            background: rgba(255, 107, 53, 0.2);
+            font-weight: 600;
+        }
+
+        .results-table tr:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .chart-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top: 4px solid #ff6b35;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .param-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <button onclick="window.location.href='index.html'">Home</button>
+        <button onclick="window.location.href='index.html'">Imputation</button>
+        <button onclick="window.location.href='benchmarks.html'">Benchmarks</button>
+    </nav>
+
+    <div class="container">
+        <h1>Benchmark Imputation Methods</h1>
+
+        <!-- Wizard Steps -->
+        <div class="wizard">
+            <!-- Step 1: Select Dataset -->
+            <div class="wizard-step active" id="step-1">
+                <h2 class="step-title">Step 1: Select Dataset</h2>
+                <div class="form-group">
+                    <label for="dataset-select">Choose a dataset:</label>
+                    <select id="dataset-select">
+                        <option value="iris">IRIS (Numeric)</option>
+                        <option value="wine">WINE (Numeric)</option>
+                        <option value="sonar">SONAR (Numeric)</option>
+                        <option value="titanic">Titanic (Mixed)</option>
+                    </select>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="nextStep(2)">Next</button>
+                </div>
+            </div>
+
+            <!-- Step 2: Select Missing Rate -->
+            <div class="wizard-step" id="step-2">
+                <h2 class="step-title">Step 2: Select Missing Rate</h2>
+                <div class="form-group">
+                    <label for="missing-rate">Missing rate: <span class="range-value" id="missing-rate-value">20%</span></label>
+                    <input type="range" id="missing-rate" min="10" max="50" value="20" step="5" oninput="updateRangeValue()">
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" onclick="prevStep(1)">Back</button>
+                    <button class="btn btn-primary" onclick="nextStep(3)">Next</button>
+                </div>
+            </div>
+
+            <!-- Step 3: Select Methods -->
+            <div class="wizard-step" id="step-3">
+                <h2 class="step-title">Step 3: Select Methods</h2>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="method-iscak" value="iscak" onchange="toggleMethodParams('iscak')">
+                        <label for="method-iscak">ISCA-k</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="method-knn" value="knn" onchange="toggleMethodParams('knn')">
+                        <label for="method-knn">kNN</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="method-mice" value="mice" onchange="toggleMethodParams('mice')">
+                        <label for="method-mice">MICE</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="method-missforest" value="missforest" onchange="toggleMethodParams('missforest')">
+                        <label for="method-missforest">MissForest</label>
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" onclick="prevStep(2)">Back</button>
+                    <button class="btn btn-primary" onclick="nextStep(4)" id="btn-to-params">Next</button>
+                </div>
+            </div>
+
+            <!-- Step 4: Configure Parameters -->
+            <div class="wizard-step" id="step-4">
+                <h2 class="step-title">Step 4: Configure Parameters</h2>
+
+                <!-- ISCA-k Parameters -->
+                <div class="method-params" id="params-iscak">
+                    <h3>ISCA-k Parameters</h3>
+                    <div class="param-grid">
+                        <div class="form-group">
+                            <label for="iscak-min-friends">Min Friends:</label>
+                            <input type="number" id="iscak-min-friends" value="3" min="1" max="20">
+                        </div>
+                        <div class="form-group">
+                            <label for="iscak-max-friends">Max Friends:</label>
+                            <input type="number" id="iscak-max-friends" value="15" min="1" max="50">
+                        </div>
+                        <div class="form-group">
+                            <label for="iscak-mi-neighbors">MI Neighbors:</label>
+                            <input type="number" id="iscak-mi-neighbors" value="3" min="1" max="10">
+                        </div>
+                        <div class="form-group">
+                            <label for="iscak-max-cycles">Max Cycles:</label>
+                            <input type="number" id="iscak-max-cycles" value="3" min="1" max="10">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- kNN Parameters -->
+                <div class="method-params" id="params-knn">
+                    <h3>kNN Parameters</h3>
+                    <div class="param-grid">
+                        <div class="form-group">
+                            <label for="knn-k">k (Neighbors):</label>
+                            <input type="number" id="knn-k" value="5" min="1" max="20">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MICE Parameters -->
+                <div class="method-params" id="params-mice">
+                    <h3>MICE Parameters</h3>
+                    <div class="param-grid">
+                        <div class="form-group">
+                            <label for="mice-max-iter">Max Iterations:</label>
+                            <input type="number" id="mice-max-iter" value="10" min="1" max="50">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MissForest Parameters -->
+                <div class="method-params" id="params-missforest">
+                    <h3>MissForest Parameters</h3>
+                    <div class="param-grid">
+                        <div class="form-group">
+                            <label for="missforest-n-estimators">N Estimators:</label>
+                            <input type="number" id="missforest-n-estimators" value="10" min="5" max="100">
+                        </div>
+                        <div class="form-group">
+                            <label for="missforest-max-iter">Max Iterations:</label>
+                            <input type="number" id="missforest-max-iter" value="10" min="1" max="50">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-secondary" onclick="prevStep(3)">Back</button>
+                    <button class="btn btn-primary" onclick="runBenchmark()">Run Benchmark</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading -->
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Running benchmark... This may take a few minutes.</p>
+        </div>
+
+        <!-- Results -->
+        <div class="results-container" id="results">
+            <h2 class="step-title">Results</h2>
+
+            <div class="chart-container">
+                <canvas id="nrmse-chart"></canvas>
+            </div>
+
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>R²</th>
+                        <th>Pearson</th>
+                        <th>NRMSE</th>
+                        <th>MAE</th>
+                        <th>Accuracy</th>
+                    </tr>
+                </thead>
+                <tbody id="results-tbody">
+                    <!-- Results will be inserted here -->
+                </tbody>
+            </table>
+
+            <button class="btn btn-primary" onclick="resetBenchmark()">Run Another Benchmark</button>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://iscak-backend.onrender.com';
+        let benchmarkResults = null;
+
+        function nextStep(stepNum) {
+            // Validate current step
+            if (stepNum === 4) {
+                const selectedMethods = getSelectedMethods();
+                if (selectedMethods.length === 0) {
+                    alert('Please select at least one method.');
+                    return;
+                }
+            }
+
+            document.querySelectorAll('.wizard-step').forEach(step => step.classList.remove('active'));
+            document.getElementById(`step-${stepNum}`).classList.add('active');
+        }
+
+        function prevStep(stepNum) {
+            document.querySelectorAll('.wizard-step').forEach(step => step.classList.remove('active'));
+            document.getElementById(`step-${stepNum}`).classList.add('active');
+        }
+
+        function updateRangeValue() {
+            const value = document.getElementById('missing-rate').value;
+            document.getElementById('missing-rate-value').textContent = `${value}%`;
+        }
+
+        function toggleMethodParams(method) {
+            const checkbox = document.getElementById(`method-${method}`);
+            const params = document.getElementById(`params-${method}`);
+            if (checkbox.checked) {
+                params.classList.add('active');
+            } else {
+                params.classList.remove('active');
+            }
+        }
+
+        function getSelectedMethods() {
+            const methods = [];
+            ['iscak', 'knn', 'mice', 'missforest'].forEach(method => {
+                if (document.getElementById(`method-${method}`).checked) {
+                    methods.push(method);
+                }
+            });
+            return methods;
+        }
+
+        function getMethodParams(method) {
+            if (method === 'iscak') {
+                return {
+                    min_friends: parseInt(document.getElementById('iscak-min-friends').value),
+                    max_friends: parseInt(document.getElementById('iscak-max-friends').value),
+                    mi_neighbors: parseInt(document.getElementById('iscak-mi-neighbors').value),
+                    max_cycles: parseInt(document.getElementById('iscak-max-cycles').value)
+                };
+            } else if (method === 'knn') {
+                return {
+                    k: parseInt(document.getElementById('knn-k').value)
+                };
+            } else if (method === 'mice') {
+                return {
+                    max_iter: parseInt(document.getElementById('mice-max-iter').value)
+                };
+            } else if (method === 'missforest') {
+                return {
+                    n_estimators: parseInt(document.getElementById('missforest-n-estimators').value),
+                    max_iter: parseInt(document.getElementById('missforest-max-iter').value)
+                };
+            }
+            return {};
+        }
+
+        async function runBenchmark() {
+            const dataset = document.getElementById('dataset-select').value;
+            const missingRate = parseFloat(document.getElementById('missing-rate').value) / 100;
+            const methods = getSelectedMethods();
+
+            if (methods.length === 0) {
+                alert('Please select at least one method.');
+                return;
+            }
+
+            // Prepare request
+            const requestData = {
+                dataset: dataset,
+                missing_rate: missingRate,
+                methods: methods,
+                n_runs: 3
+            };
+
+            // Add parameters for each selected method
+            methods.forEach(method => {
+                requestData[`${method}_params`] = getMethodParams(method);
+            });
+
+            // Show loading
+            document.querySelector('.wizard').style.display = 'none';
+            document.getElementById('loading').classList.add('active');
+
+            try {
+                const response = await fetch(`${API_URL}/benchmark`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Benchmark request failed');
+                }
+
+                const result = await response.json();
+                benchmarkResults = result.results;
+                displayResults(result.results);
+
+            } catch (error) {
+                alert(`Benchmark failed: ${error.message}`);
+                document.getElementById('loading').classList.remove('active');
+                document.querySelector('.wizard').style.display = 'block';
+            }
+        }
+
+        function displayResults(results) {
+            document.getElementById('loading').classList.remove('active');
+            document.getElementById('results').classList.add('active');
+
+            // Populate table
+            const tbody = document.getElementById('results-tbody');
+            tbody.innerHTML = '';
+
+            const methodNames = {
+                'iscak': 'ISCA-k',
+                'knn': 'kNN',
+                'mice': 'MICE',
+                'missforest': 'MissForest'
+            };
+
+            Object.keys(results).forEach(method => {
+                const data = results[method];
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${methodNames[method]}</strong></td>
+                    <td>${formatMetric(data.R2_mean, data.R2_std)}</td>
+                    <td>${formatMetric(data.Pearson_mean, data.Pearson_std)}</td>
+                    <td>${formatMetric(data.NRMSE_mean, data.NRMSE_std)}</td>
+                    <td>${formatMetric(data.MAE_mean, data.MAE_std)}</td>
+                    <td>${formatMetric(data.Accuracy_mean, data.Accuracy_std)}</td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            // Create chart
+            createNRMSEChart(results, methodNames);
+        }
+
+        function formatMetric(mean, std) {
+            if (isNaN(mean) || mean === null) {
+                return 'N/A';
+            }
+            return `${mean.toFixed(3)} ± ${std.toFixed(3)}`;
+        }
+
+        function createNRMSEChart(results, methodNames) {
+            const ctx = document.getElementById('nrmse-chart').getContext('2d');
+
+            const labels = [];
+            const nrmseData = [];
+            const colors = {
+                'iscak': '#ff6b35',
+                'knn': '#4ecdc4',
+                'mice': '#f7b731',
+                'missforest': '#5f27cd'
+            };
+
+            Object.keys(results).forEach(method => {
+                labels.push(methodNames[method]);
+                nrmseData.push(results[method].NRMSE_mean);
+            });
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'NRMSE (lower is better)',
+                        data: nrmseData,
+                        backgroundColor: Object.keys(results).map(m => colors[m]),
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'NRMSE Comparison',
+                            color: '#ffffff',
+                            font: {
+                                size: 18,
+                                family: 'Exo'
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: '#ffffff'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#ffffff'
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function resetBenchmark() {
+            document.getElementById('results').classList.remove('active');
+            document.querySelector('.wizard').style.display = 'block';
+            nextStep(1);
+
+            // Reset selections
+            document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                cb.checked = false;
+            });
+            document.querySelectorAll('.method-params').forEach(params => {
+                params.classList.remove('active');
+            });
+        }
+    </script>
+</body>
+</html>
